@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "otus project",
   "private": true,
-  "main": "index.js",
+  "main": "src/js/index.js",
   "scripts": {
     "test": "jest",
     "build": "cross-env NODE_ENV=production babel src --out-dir dist --extensions .ts,.tsx",

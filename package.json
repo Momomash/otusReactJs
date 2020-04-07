@@ -1,0 +1,62 @@
+{
+  "name": "momo_project",
+  "version": "1.0.0",
+  "description": "otus project",
+  "main": "./src/index.ts",
+  "scripts": {
+    "test": "jest",
+    "build": "npx webpack --mode production",
+    "prepublishOnly": "npm run build"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint",
+      "pre-push": "npm run lint"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Momomash/otusReactJs.git"
+  },
+  "keywords": [
+    "otus",
+    "reactjs"
+  ],
+  "author": "Momomash",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Momomash/otusReactJs/issues"
+  },
+  "homepage": "https://github.com/Momomash/otusReactJs#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.9.0",
+    "@babel/polyfill": "^7.8.7",
+    "@babel/preset-env": "^7.9.0",
+    "@babel/preset-typescript": "^7.9.0",
+    "@types/jest": "^25.2.1",
+    "@typescript-eslint/eslint-plugin": "^2.26.0",
+    "@typescript-eslint/parser": "^2.26.0",
+    "@webpack-cli/init": "^0.3.0",
+    "babel-cli": "^6.26.0",
+    "babel-jest": "^25.2.6",
+    "babel-loader": "^8.1.0",
+    "cross-env": "^7.0.2",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.10.1",
+    "eslint-config-standard": "^14.1.1",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-react": "^7.19.0",
+    "eslint-plugin-standard": "^4.0.1",
+    "jest": "^25.2.7",
+    "prettier": "^2.0.2",
+    "typescript": "^3.8.3",
+    "webpack": "^4.42.1",
+    "webpack-cli": "^3.3.11"
+  },
+  "dependencies": {
+    "lodash": "^4.17.15"
+  }
+}

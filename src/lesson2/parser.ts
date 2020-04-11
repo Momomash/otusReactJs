@@ -4,6 +4,7 @@ import {
     isBracketClose,
     isBinar,
     isUnar,
+    isFunction,
     likeNumber,
     likeOperator
 } from "./helpers";
@@ -22,6 +23,7 @@ export const parser = (line: string): ParsedLineType | null => {
         const isValidNumberPush = likeOperator(prevItem) && isNumber(item);
         const isValidBinarOperatorPush = likeNumber(prevItem) && isBinar(item);
         const isValidUnarOperatorPush = likeNumber(prevItem) && isUnar(item);
+        const isValidFunctionPush = likeOperator(prevItem) && isFunction(item);
         const isValidBracketOpenPush = likeOperator(prevItem) && isBracketOpen(item);
         const isValidBracketClosePush = likeNumber(prevItem) && isBracketClose(item);
 
@@ -29,6 +31,12 @@ export const parser = (line: string): ParsedLineType | null => {
             result.push(Number(item));
         } else if (isValidBinarOperatorPush || isValidUnarOperatorPush) {
             result.push(item);
+        } else if (isValidFunctionPush) {
+            let arr = item.split('(');
+
+            let number = arr[1].slice(0, -1);
+            result.push(Number(number));
+            result.push(arr[0]);
         } else if (isValidBracketOpenPush) {
             result.push(item);
             BracketOpenCount++;

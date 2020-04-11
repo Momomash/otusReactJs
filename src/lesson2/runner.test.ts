@@ -5,6 +5,9 @@ describe("Runner simple cases", () => {
     it("3 ^ 3", () => {
         expect(runner("3 ^ 3")).toEqual(27);
     });
+    it("cos(0)", () => {
+        expect(runner("cos(0)")).toEqual(1);
+    });
     it("4 !", () => {
         expect(runner("4 !")).toEqual(24);
     });
@@ -14,8 +17,8 @@ describe("Runner simple cases", () => {
     it("2 + ( 5 - 2 )", () => {
         expect(runner("2 + ( 5 - 2 )")).toEqual(5);
     });
-    it("2 + ( 5 - 2 + ( 1 + 3 ) - ( 2 + 2 ) )", () => {
-        expect(runner("2 + ( 5 - 2 + ( 1 + 3 ) - ( 2 + 2 ) )")).toEqual(5);
+    it("2 + ( 5 - 2 + ( 1 + 3 ) - ( 2 + 2 ) + tan(0) )", () => {
+        expect(runner("2 + ( 5 - 2 + ( 1 + 3 ) - ( 2 + 2 ) + tan(0) )")).toEqual(5);
     });
     it("2 + ( 3 ! - ( 3 ** ) + ( 10 ^ 2 ) )", () => {
         expect(runner("2 + ( 3 ! - ( 3 ** ) + ( 10 ^ 2 ) )")).toEqual(99);

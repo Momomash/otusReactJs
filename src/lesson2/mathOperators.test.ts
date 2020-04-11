@@ -1,7 +1,16 @@
-import {squ, exp, fac, mul, div, add, minus} from "./mathOperators";
+import {sin, cos, tan, squ, exp, fac, mul, div, add, minus} from "./mathOperators";
 
 describe("mathOperators test cases", () => {
 //new test
+    it("tan 0 to equal 0", () => {
+        expect(tan(0)).toBe(0);
+    });
+    it("sin 0 to equal 0", () => {
+        expect(sin(0)).toBe(0);
+    });
+    it("cos 0 to equal 1", () => {
+        expect(cos(0)).toBe(1);
+    });
     it("squ 3 ** to equal 9", () => {
         expect(squ(3)).toBe(9);
     });

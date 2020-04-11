@@ -16,6 +16,9 @@ describe("Parser correct cases", () => {
     expect(parser("1 + 32 - 2 + 2")).toEqual([1, "+", 32, "-", 2, "+", 2]);
   });
 //new test
+  it("cos(12)", () => {
+    expect(parser("cos(12)")).toEqual([12, 'cos']);
+  });
   it("3 !", () => {
     expect(parser("3 !")).toEqual([3, "!"]);
   });

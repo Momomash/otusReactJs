@@ -12,6 +12,16 @@ export const squ: UnarOperationType = (
     first: number
 ): number => first * first;
 
+export const sin: UnarOperationType = (first: number): number => {
+    return Math.sin(first);
+};
+export const cos: UnarOperationType = (first: number): number => {
+    return Math.cos(first);
+};
+export const tan: UnarOperationType = (first: number): number => {
+    return Math.tan(first);
+};
+
 //ScalarOperators
 
 export const exp: ScalarOperationType = (first: number, second: number): number => {
@@ -53,6 +63,9 @@ export const binarOperators: { [key: string]: ScalarOperationType } = {
 export const unarOperators: { [key: string]: UnarOperationType } = {
     "!": fac,
     "**": squ,
+    "sin":sin,
+    "cos":cos,
+    "tan":tan,
 };
 
 export const mathPriorities: number[] = [1, 2];
@@ -60,6 +73,9 @@ export const mathPriorities: number[] = [1, 2];
 const [FIRST, SECOND] = mathPriorities;
 
 export const mathOperatorsPriorities: { [key: string]: number } = {
+    "sin":FIRST,
+    "cos":FIRST,
+    "tan":FIRST,
     "!": FIRST,
     "^": FIRST,
     "**": FIRST,

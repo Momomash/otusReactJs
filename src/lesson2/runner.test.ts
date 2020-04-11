@@ -3,13 +3,22 @@ import {runner} from "./runner";
 describe("Runner simple cases", () => {
 //new test
     it("3 ^ 3", () => {
-        expect(runner("3 ^ 3")).toEqual(17);
+        expect(runner("3 ^ 3")).toEqual(27);
     });
     it("4 !", () => {
         expect(runner("4 !")).toEqual(24);
     });
     it("3 ^ 3", () => {
         expect(runner("3 ^ 3")).toEqual(27);
+    });
+    it("2 + ( 5 - 2 )", () => {
+        expect(runner("2 + ( 5 - 2 )")).toEqual(5);
+    });
+    it("2 + ( 5 - 2 + ( 1 + 3 ) - ( 2 + 2 ) )", () => {
+        expect(runner("2 + ( 5 - 2 + ( 1 + 3 ) - ( 2 + 2 ) )")).toEqual(5);
+    });
+    it("2 + ( 3 ! - ( 3 ** ) + ( 10 ^ 2 ) )", () => {
+        expect(runner("2 + ( 3 ! - ( 3 ** ) + ( 10 ^ 2 ) )")).toEqual(99);
     });
 //end new test
     it("1 * 32", () => {
@@ -28,7 +37,7 @@ describe("Runner simple cases", () => {
 describe("Runner tripled/mixed cases", () => {
 //new test
     it("3 ^ 3 - 5", () => {
-        expect(runner("3 ^ 3 - 5")).toEqual(14);
+        expect(runner("3 ^ 3 - 5")).toEqual(22);
     });
 //end new test
 

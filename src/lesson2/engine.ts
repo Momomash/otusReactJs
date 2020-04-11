@@ -13,13 +13,12 @@ export const firstPrioritiesCalc = (stack: ParsedLineType): ParsedLineType =>
     stack.reduce<ParsedLineType>((result, item) => {
         const prevPrevItem = result[result.length - 2];
         const prevItem = result[result.length - 1];
-        //если унарный оператор
         if (unarOperators[item]) {
             result = [
                 ...result.slice(0, -1),
                 unarOperators[item](Number(prevItem)),
             ];
-        } else  //проверка предыдущего
+        } else
         if (!isNumber(String(prevItem)) && mathOperatorsPriorities[prevItem] === FIRST) {
             if (!binarOperators[prevItem]) {
                 throw new TypeError("Unexpected stack!");
@@ -28,7 +27,6 @@ export const firstPrioritiesCalc = (stack: ParsedLineType): ParsedLineType =>
                 ...result.slice(0, -2),
                 binarOperators[prevItem](Number(prevPrevItem), Number(item)),
             ];
-
         } else {
             result.push(item);
         }

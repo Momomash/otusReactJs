@@ -1,33 +1,50 @@
-import {isNumber} from "./helpers";
 import {
-    binarOperators,
-    unarOperators
-} from "./mathOperators";
+    isNumber,
+    isBracketOpen,
+    isBracketClose,
+    isBinar,
+    isUnar,
+    likeNumber,
+    likeOperator
+} from "./helpers";
+
 
 export type ParsedLineType = (number | string)[];
 
 export const parser = (line: string): ParsedLineType | null => {
     const stack = line.split(" ");
+    let BracketOpenCount = 0;
+    let BracketCloseCount = 0;
 
-    return stack.reduce<ParsedLineType>((result, item, key) => {
+    const parsedStack = stack.reduce<ParsedLineType>((result, item, key) => {
+
         const prevItem = stack[key - 1];
-
-        const isValidNumberPush = (!prevItem || binarOperators.hasOwnProperty(prevItem)) && isNumber(item);
-        const isValidOperatorPush =
-            (isNumber(prevItem) || unarOperators.hasOwnProperty(prevItem) )&&
-            binarOperators.hasOwnProperty(item);
-        const isValidUnarOperatorPush =
-            isNumber(prevItem) &&
-            !isNumber(item) &&
-            unarOperators.hasOwnProperty(item);
+        const isValidNumberPush = likeOperator(prevItem) && isNumber(item);
+        const isValidBinarOperatorPush = likeNumber(prevItem) && isBinar(item);
+        const isValidUnarOperatorPush = likeNumber(prevItem) && isUnar(item);
+        const isValidBracketOpenPush = likeOperator(prevItem) && isBracketOpen(item);
+        const isValidBracketClosePush = likeNumber(prevItem) && isBracketClose(item);
 
         if (isValidNumberPush) {
             result.push(Number(item));
-        } else if (isValidOperatorPush || isValidUnarOperatorPush) {
+        } else if (isValidBinarOperatorPush || isValidUnarOperatorPush) {
             result.push(item);
+        } else if (isValidBracketOpenPush) {
+            result.push(item);
+            BracketOpenCount++;
+        } else if (isValidBracketClosePush) {
+            result.push(item);
+            BracketCloseCount++;
         } else {
             throw new TypeError("Unexpected string");
         }
         return result;
     }, []);
+    if (BracketOpenCount !== BracketCloseCount) {
+        throw new TypeError("Unexpected string");
+    }
+    return parsedStack;
+
+
 };
+

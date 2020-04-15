@@ -70,9 +70,11 @@
     "webpack-cli": "3.3.11"
   },
   "dependencies": {
+    "@storybook/source-loader": "^5.3.18",
     "core-js": "3.6.5",
     "lodash": "4.17.15",
     "react": "16.13.1",
+    "react-docgen-typescript-loader": "^3.7.2",
     "react-dom": "16.13.1"
   }
 }

@@ -1,7 +1,24 @@
 import {sin, cos, tan, squ, exp, fac, mul, div, add, minus} from "./mathOperators";
 
 describe("mathOperators test cases", () => {
-//new test
+
+
+
+    it("add 4 + 2 to equal 6", () => {
+        expect(add(4, 2)).toBe(6);
+    });
+
+    it("minus 4 - 2 to equal 2", () => {
+        expect(minus(4, 2)).toBe(2);
+    });
+    it("mul 2 * 2 to equal 4", () => {
+        expect(mul(2, 2)).toBe(4);
+    });
+
+    it("div 4 / 2 to equal 2", () => {
+        expect(div(4, 2)).toBe(2);
+    });
+    //new test
     it("tan 0 to equal 0", () => {
         expect(tan(0)).toBe(0);
     });
@@ -21,19 +38,4 @@ describe("mathOperators test cases", () => {
         expect(fac(4)).toBe(24);
     });
 //end new test
-    it("mul 2 * 2 to equal 4", () => {
-        expect(mul(2, 2)).toBe(4);
-    });
-
-    it("div 4 / 2 to equal 2", () => {
-        expect(div(4, 2)).toBe(2);
-    });
-
-    it("add 4 + 2 to equal 6", () => {
-        expect(add(4, 2)).toBe(6);
-    });
-
-    it("minus 4 - 2 to equal 2", () => {
-        expect(minus(4, 2)).toBe(2);
-    });
 });

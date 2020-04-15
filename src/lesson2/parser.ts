@@ -4,7 +4,7 @@ import {
     isBracketClose,
     isBinar,
     isUnar,
-    isFunction,
+    startsWithFunction,
     likeNumber,
     likeOperator
 } from "./helpers";
@@ -23,7 +23,7 @@ export const parser = (line: string): ParsedLineType | null => {
         const isValidNumberPush = likeOperator(prevItem) && isNumber(item);
         const isValidBinarOperatorPush = likeNumber(prevItem) && isBinar(item);
         const isValidUnarOperatorPush = likeNumber(prevItem) && isUnar(item);
-        const isValidFunctionPush = likeOperator(prevItem) && isFunction(item);
+        const isValidFunctionPush = likeOperator(prevItem) && startsWithFunction(item);
         const isValidBracketOpenPush = likeOperator(prevItem) && isBracketOpen(item);
         const isValidBracketClosePush = likeNumber(prevItem) && isBracketClose(item);
 

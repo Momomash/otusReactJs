@@ -1,6 +1,17 @@
 import {runner} from "./runner";
 
 describe("Runner simple cases", () => {
+    it("1 * 32", () => {
+        expect(runner("1 * 32")).toEqual(32);
+    });
+
+    it("2 * 32", () => {
+        expect(runner("2 * 32")).toEqual(64);
+    });
+
+    it("2 + 32", () => {
+        expect(runner("2 + 32")).toEqual(34);
+    });
 //new test
     it("3 ^ 3", () => {
         expect(runner("3 ^ 3")).toEqual(27);
@@ -24,17 +35,7 @@ describe("Runner simple cases", () => {
         expect(runner("2 + ( 3 ! - ( 3 ** ) + ( 10 ^ 2 ) )")).toEqual(99);
     });
 //end new test
-    it("1 * 32", () => {
-        expect(runner("1 * 32")).toEqual(32);
-    });
 
-    it("2 * 32", () => {
-        expect(runner("2 * 32")).toEqual(64);
-    });
-
-    it("2 + 32", () => {
-        expect(runner("2 + 32")).toEqual(34);
-    });
 });
 
 describe("Runner tripled/mixed cases", () => {

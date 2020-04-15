@@ -18,7 +18,7 @@ export const isBinar = (item: string): boolean => {
     return binarOperators.hasOwnProperty(item);
 };
 
-export const isFunction = (item: string): boolean => {
+export const startsWithFunction = (item: string): boolean => {
     if (!item){
         return false;
     }
@@ -31,7 +31,7 @@ export const isFunction = (item: string): boolean => {
 };
 
 export const likeNumber = (item: string): boolean => {
-    return isUnar(item) || isBracketClose(item) || isNumber(item) || isFunction(item);
+    return isUnar(item) || isBracketClose(item) || isNumber(item) || startsWithFunction(item);
 };
 
 export const likeOperator = (item: string): boolean => {

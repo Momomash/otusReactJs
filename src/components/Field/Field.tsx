@@ -1,12 +1,7 @@
 import * as React from 'react';
 
 import styled from '@emotion/styled';
-
-enum CellStatus {
-    Empty = 0,
-    Living = 1,
-    Young = 2,
-}
+import { CellStatus, Cell } from './components';
 
 const Game = styled.div`
     display: flex;
@@ -25,24 +20,7 @@ const FieldRow = styled.div`
     display: flex;
     flex-direction: row;
 `;
-const EmptyCell = styled.div`
-    background-color: white;
-    border: 1px solid lightgray;
-    width: 20px;
-    height: 20px;
-`;
-const LivingCell = styled.div`
-    background-color: green;
-    border: 1px solid white;
-    width: 20px;
-    height: 20px;
-`;
-const YongCell = styled.div`
-    background-color: lightgreen;
-    border: 1px solid white;
-    width: 20px;
-    height: 20px;
-`;
+
 type Props = {};
 type State = {
     sizeX: number;
@@ -65,26 +43,70 @@ export class Field extends React.Component<Props, State> {
     handleChange(event: any) {
         const target = event.target;
         const name: string = target.name;
-
         this.setState({ ...this.state, [name]: event.target.value });
     }
 
     handleSubmit(event: any) {
-        this.setState({
-            cells: this.generateCells(this.state.sizeX, this.state.sizeY),
-        });
         event.preventDefault();
+        this.setState({
+            cells: this.regenerateCells(this.state.sizeX, this.state.sizeY),
+        });
     }
 
     generateCells(x: number, y: number): Array<Array<CellStatus>> {
         const arr: Array<Array<CellStatus>> = [];
-        for (let i = y; i > 0; i--) {
+        for (let i = y - 1; i >= 0; i--) {
             arr[i] = [];
-            for (let j = x; j > 0; j--) {
+            for (let j = x - 1; j >= 0; j--) {
                 arr[i][j] = CellStatus.Empty;
             }
         }
         return arr;
+    }
+
+    regenerateCells(x: number, y: number): Array<Array<CellStatus>> {
+        console.log(this.state.cells);
+        const lastArr = this.state.cells;
+        const cellsX = this.state.cells[0].length;
+        const cellsY = this.state.cells.length;
+        if (y > cellsY) {
+            for (let i = y; i != cellsY; i--) {
+                lastArr.push([]);
+                for (let j = cellsX; j > 0; j--) {
+                    lastArr[lastArr.length - 1][j] = CellStatus.Empty;
+                }
+            }
+        }
+        if (y < cellsY) {
+            for (let i = y; i != cellsY; i++) {
+                lastArr.pop();
+            }
+        }
+        if (x > cellsX) {
+            for (let i = 0; i < y; i++) {
+                for (let j = x; j != cellsX; j--) {
+                    lastArr[i].push(CellStatus.Empty);
+                }
+            }
+        }
+        if (x < cellsX) {
+            for (let i = 0; i < y; i++) {
+                for (let j = x; j != cellsX; j++) {
+                    lastArr[i].pop();
+                }
+            }
+        }
+        return lastArr;
+    }
+
+    toggleStatus(i: number, j: number) {
+        const cells = this.state.cells;
+        if (this.state.cells[i][j] === CellStatus.Empty) {
+            cells[i][j] = CellStatus.Living;
+        } else if (this.state.cells[i][j] === CellStatus.Living) {
+            cells[i][j] = CellStatus.Empty;
+        }
+        this.setState({ cells: cells });
     }
 
     render() {
@@ -96,7 +118,6 @@ export class Field extends React.Component<Props, State> {
                         <form onSubmit={this.handleSubmit}>
                             <input
                                 type="number"
-                                min="10"
                                 value={this.state.sizeX}
                                 name="sizeX"
                                 onChange={this.handleChange}
@@ -104,7 +125,6 @@ export class Field extends React.Component<Props, State> {
                             />
                             <input
                                 type="number"
-                                min="10"
                                 value={this.state.sizeY}
                                 name="sizeY"
                                 onChange={this.handleChange}
@@ -117,16 +137,16 @@ export class Field extends React.Component<Props, State> {
                             />
                         </form>
                     </Controls>
-                    {this.state.cells.map((i: Array<number>) => (
-                        <FieldRow>
-                            {i.map((j: number) => {
-                                if (j === CellStatus.Empty) {
-                                    return <EmptyCell/>;
-                                } else if (j === CellStatus.Living) {
-                                    return <LivingCell/>;
-                                } else {
-                                    return <YongCell/>;
-                                }
+                    {this.state.cells.map((row: Array<CellStatus>, i: number) => (
+                        <FieldRow key={'row' + i}>
+                            {row.map((col: CellStatus, j: number) => {
+                                return (
+                                    <Cell
+                                        key={'row' + i + 'col' + j}
+                                        col={col}
+                                        onClick={(): void => this.toggleStatus(i, j)}
+                                    />
+                                );
                             })}
                         </FieldRow>
                     ))}

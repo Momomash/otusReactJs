@@ -48,6 +48,7 @@ export class Field extends React.Component<Props, State> {
 
     handleSubmit(event: any) {
         event.preventDefault();
+        console.log('fff');
         this.setState({
             cells: this.regenerateCells(this.state.sizeX, this.state.sizeY),
         });
@@ -139,11 +140,11 @@ export class Field extends React.Component<Props, State> {
                     </Controls>
                     {this.state.cells.map((row: Array<CellStatus>, i: number) => (
                         <FieldRow key={'row' + i}>
-                            {row.map((col: CellStatus, j: number) => {
+                            {row.map((status: CellStatus, j: number) => {
                                 return (
                                     <Cell
                                         key={'row' + i + 'col' + j}
-                                        col={col}
+                                        status={status}
                                         onClick={(): void => this.toggleStatus(i, j)}
                                     />
                                 );

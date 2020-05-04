@@ -9,12 +9,12 @@ export enum CellStatus {
 }
 //emotion
 const CellDiv = styled.div((props: { status: CellStatus }) => ({
-    'background-color':
+    backgroundColor:
         props.status === CellStatus.Empty
             ? 'white'
             : props.status === CellStatus.Living
-            ? 'green'
-            : 'ligntgrey',
+            ? 'lawngreen'
+            : 'greenyellow',
     border: '1px solid lightgray',
     width: '20px',
     height: '20px',
@@ -22,13 +22,13 @@ const CellDiv = styled.div((props: { status: CellStatus }) => ({
 //end emotion
 
 type Props = {
-    col: CellStatus;
+    status: CellStatus;
     onClick: () => void;
 };
 type State = {};
 
 export class Cell extends React.Component<Props, State> {
     render() {
-        return <CellDiv status={this.props.col} onClick={this.props.onClick} />;
+        return <CellDiv status={this.props.status} onClick={(): void => this.props.onClick()} />;
     }
 }

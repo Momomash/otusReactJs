@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Cell render Empty Cell 1`] = `
+.emotion-0 {
+  background-color: white;
+  border: 1px solid lightgray;
+  width: 20px;
+  height: 20px;
+}
+
+<div
+  className="emotion-0"
+  onClick={[Function]}
+/>
+`;

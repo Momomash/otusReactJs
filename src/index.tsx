@@ -1,9 +1,9 @@
 import * as React from "react";
-import  App from "./App"
+import *as ReactDOM from "react-dom";
 
-import {render} from "react-dom";
+import {Field} from "./components/Field";
 
-render(
-    <App/>,
+ReactDOM.render(
+    <Field/>,
     document.getElementById('root')
 );

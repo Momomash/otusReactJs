@@ -3,6 +3,17 @@ import * as React from 'react';
 import styled from '@emotion/styled';
 import { CellStatus, Cell } from './components';
 
+const generateCells = (x: number, y: number): Array<Array<CellStatus>> => {
+    const arr: Array<Array<CellStatus>> = [];
+    for (let i = y - 1; i >= 0; i--) {
+        arr[i] = [];
+        for (let j = x - 1; j >= 0; j--) {
+            arr[i][j] = CellStatus.Empty;
+        }
+    }
+    return arr;
+};
+
 const Game = styled.div`
     display: flex;
     flex-direction: column;
@@ -25,60 +36,53 @@ type Props = {};
 type State = {
     sizeX: number;
     sizeY: number;
-    cells: any;
+    cells: CellStatus[][];
 };
 
 export class Field extends React.Component<Props, State> {
-    constructor(props: any) {
+    constructor(props: Props) {
         super(props);
         this.state = {
             sizeX: 10,
             sizeY: 10,
-            cells: this.generateCells(10, 10),
+            cells: generateCells(10, 10),
         };
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    handleChange(event: any) {
+    handleChange = (event: any) => {
         const target = event.target;
         const name: string = target.name;
-        this.setState({ ...this.state, [name]: event.target.value });
-    }
-
-    handleSubmit(event: any) {
-        event.preventDefault();
-        console.log('fff');
-        this.setState({
-            cells: this.regenerateCells(this.state.sizeX, this.state.sizeY),
+        //this.setState({ ...this.state, [name]: target.value });
+        this.setState((prevState) => {
+            return {
+                ...prevState,
+                [name]: target.value,
+            };
         });
-    }
+    };
 
-    generateCells(x: number, y: number): Array<Array<CellStatus>> {
-        const arr: Array<Array<CellStatus>> = [];
-        for (let i = y - 1; i >= 0; i--) {
-            arr[i] = [];
-            for (let j = x - 1; j >= 0; j--) {
-                arr[i][j] = CellStatus.Empty;
-            }
-        }
-        return arr;
-    }
+    handleSubmit = (event: any) => {
+        event.preventDefault();
+        this.setState((prevState) => {
+            return {
+                ...prevState,
+                cells: this.regenerateCells(prevState.sizeX, prevState.sizeY),
+            };
+        });
+    };
 
     regenerateCells(x: number, y: number): Array<Array<CellStatus>> {
-        console.log(this.state.cells);
         const lastArr = this.state.cells;
         const cellsX = this.state.cells[0].length;
         const cellsY = this.state.cells.length;
         if (y > cellsY) {
             for (let i = y; i != cellsY; i--) {
                 lastArr.push([]);
-                for (let j = cellsX; j > 0; j--) {
+                for (let j = cellsX - 1; j >= 0; j--) {
                     lastArr[lastArr.length - 1][j] = CellStatus.Empty;
                 }
             }
-        }
-        if (y < cellsY) {
+        } else if (y < cellsY) {
             for (let i = y; i != cellsY; i++) {
                 lastArr.pop();
             }
@@ -89,8 +93,7 @@ export class Field extends React.Component<Props, State> {
                     lastArr[i].push(CellStatus.Empty);
                 }
             }
-        }
-        if (x < cellsX) {
+        } else if (x < cellsX) {
             for (let i = 0; i < y; i++) {
                 for (let j = x; j != cellsX; j++) {
                     lastArr[i].pop();
@@ -100,8 +103,10 @@ export class Field extends React.Component<Props, State> {
         return lastArr;
     }
 
-    toggleStatus(i: number, j: number) {
-        const cells = this.state.cells;
+    toggleStatus(i: number, j: number): void {
+        //const cells = this.state.cells;
+        const cells = Array.from(this.state.cells);
+        //let user = Object.assign({}, this.state.user);
         if (this.state.cells[i][j] === CellStatus.Empty) {
             cells[i][j] = CellStatus.Living;
         } else if (this.state.cells[i][j] === CellStatus.Living) {
@@ -110,7 +115,7 @@ export class Field extends React.Component<Props, State> {
         this.setState({ cells: cells });
     }
 
-    render() {
+    render(): JSX.Element {
         return (
             <Game>
                 <h1>Game of Life</h1>

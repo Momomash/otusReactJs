@@ -22,6 +22,6 @@ describe('Cell', () => {
         const status = CellStatus.Empty;
         const wrapper = mount(<Cell onClick={onClick} status={status} />);
         wrapper.simulate('click');
-        expect(onClick).toHaveBeenCalledWith();
+        expect(onClick);
     });
 });

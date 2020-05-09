@@ -1,5 +1,4 @@
 import * as React from 'react';
-
 import styled from '@emotion/styled';
 import { CellStatus, Cell } from './components';
 
@@ -14,18 +13,32 @@ const generateCells = (x: number, y: number): Array<Array<CellStatus>> => {
     return arr;
 };
 
-const Game = styled.div`
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-    align-items: center;
-`;
+const Game = styled.div((props: { animation: boolean }) => ({
+    display: 'flex',
+    flexDirection: 'column',
+    textAlign: 'center',
+    alignItems: 'center',
+    height: '100vh',
+    position: 'relative',
+    '&::after': {
+        content: '""',
+        backgroundImage: props.animation ? 'url("src/img/hati.jpg")' : '',
+        backgroundSize: 'cover',
+        position: 'absolute',
+        top: '0',
+        left: '0',
+        width: '100%',
+        height: '100%',
+    },
+}));
 const FieldContainer = styled.div`
     background-color: white;
     border: 2px solid gray;
     width: max-content;
 `;
-const Controls = styled.div``;
+const Controls = styled.div`
+    margin-bottom: 10px;
+`;
 
 const FieldRow = styled.div`
     display: flex;
@@ -37,6 +50,7 @@ type State = {
     sizeX: number;
     sizeY: number;
     cells: CellStatus[][];
+    animation: boolean;
 };
 
 export class Field extends React.Component<Props, State> {
@@ -46,13 +60,13 @@ export class Field extends React.Component<Props, State> {
             sizeX: 10,
             sizeY: 10,
             cells: generateCells(10, 10),
+            animation: true,
         };
     }
 
     handleChange = (event: any) => {
         const target = event.target;
         const name: string = target.name;
-        //this.setState({ ...this.state, [name]: target.value });
         this.setState((prevState) => {
             return {
                 ...prevState,
@@ -104,9 +118,7 @@ export class Field extends React.Component<Props, State> {
     }
 
     toggleStatus(i: number, j: number): void {
-        //const cells = this.state.cells;
         const cells = Array.from(this.state.cells);
-        //let user = Object.assign({}, this.state.user);
         if (this.state.cells[i][j] === CellStatus.Empty) {
             cells[i][j] = CellStatus.Living;
         } else if (this.state.cells[i][j] === CellStatus.Living) {
@@ -115,34 +127,36 @@ export class Field extends React.Component<Props, State> {
         this.setState({ cells: cells });
     }
 
+    componentDidMount(): void {
+        setTimeout(() => {
+            this.setState({ animation: false });
+        }, 2000);
+    }
+
     render(): JSX.Element {
         return (
-            <Game>
+            <Game animation={this.state.animation}>
                 <h1>Game of Life</h1>
+                <Controls>
+                    <form onSubmit={this.handleSubmit}>
+                        <input
+                            type="number"
+                            value={this.state.sizeX}
+                            name="sizeX"
+                            onChange={this.handleChange}
+                            placeholder="X"
+                        />
+                        <input
+                            type="number"
+                            value={this.state.sizeY}
+                            name="sizeY"
+                            onChange={this.handleChange}
+                            placeholder="Y"
+                        />
+                        <input type="submit" placeholder="Generate Field" value="Generate field" />
+                    </form>
+                </Controls>
                 <FieldContainer>
-                    <Controls>
-                        <form onSubmit={this.handleSubmit}>
-                            <input
-                                type="number"
-                                value={this.state.sizeX}
-                                name="sizeX"
-                                onChange={this.handleChange}
-                                placeholder="X"
-                            />
-                            <input
-                                type="number"
-                                value={this.state.sizeY}
-                                name="sizeY"
-                                onChange={this.handleChange}
-                                placeholder="Y"
-                            />
-                            <input
-                                type="submit"
-                                placeholder="Generate Field"
-                                value="Generate field"
-                            />
-                        </form>
-                    </Controls>
                     {this.state.cells.map((row: Array<CellStatus>, i: number) => (
                         <FieldRow key={'row' + i}>
                             {row.map((status: CellStatus, j: number) => {

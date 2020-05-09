@@ -21,9 +21,11 @@ const Game = styled.div((props: { animation: boolean }) => ({
     height: '100vh',
     position: 'relative',
     '&::after': {
-        content: '""',
-        backgroundImage: props.animation ? 'url("src/img/hati.jpg")' : '',
-        backgroundSize: 'cover',
+        content: props.animation ? '""' : 'none',
+        backgroundImage: 'url("src/img/pusheen.gif")',
+        backgroundPosition: '50% 50%',
+        backgroundRepeat: 'no-repeat',
+        backgroundColor: '#fcf1e4',
         position: 'absolute',
         top: '0',
         left: '0',
@@ -130,7 +132,7 @@ export class Field extends React.Component<Props, State> {
     componentDidMount(): void {
         setTimeout(() => {
             this.setState({ animation: false });
-        }, 2000);
+        }, 3000);
     }
 
     render(): JSX.Element {

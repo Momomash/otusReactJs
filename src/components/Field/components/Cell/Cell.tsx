@@ -8,7 +8,7 @@ export enum CellStatus {
     Young = 2,
 }
 
-const CellDiv = styled.div((props: { status: CellStatus; animation: boolean }) => ({
+const CellDiv = styled.div((props: { status: CellStatus; isAnimation: boolean }) => ({
     backgroundColor:
         props.status === CellStatus.Empty
             ? 'white'
@@ -18,7 +18,7 @@ const CellDiv = styled.div((props: { status: CellStatus; animation: boolean }) =
     border: '1px solid lightgray',
     width: '20px',
     height: '20px',
-    transitionDuration: props.animation ? '1s' : '0s',
+    transitionDuration: props.isAnimation ? '1s' : '0s',
 }));
 
 type Props = {
@@ -26,25 +26,25 @@ type Props = {
     onClick: () => void;
 };
 type State = {
-    animation: boolean;
+    isAnimation: boolean;
 };
 
 export class Cell extends React.Component<Props, State> {
-    state = { animation: false };
+    state = { isAnimation: false };
     componentDidUpdate(prevProps: Props): void {
         const { status } = this.props;
         if (prevProps.status !== status) {
             if (status !== CellStatus.Empty) {
-                this.setState({ animation: true });
+                this.setState({ isAnimation: true });
             } else {
-                this.setState({ animation: false });
+                this.setState({ isAnimation: false });
             }
         }
     }
     render(): JSX.Element {
         return (
             <CellDiv
-                animation={this.state.animation}
+                isAnimation={this.state.isAnimation}
                 status={this.props.status}
                 onClick={(): void => this.props.onClick()}
             />

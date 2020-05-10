@@ -13,7 +13,7 @@ const generateCells = (x: number, y: number): Array<Array<CellStatus>> => {
     return arr;
 };
 
-const Game = styled.div((props: { animation: boolean }) => ({
+const Game = styled.div((props: { isAnimation: boolean }) => ({
     display: 'flex',
     flexDirection: 'column',
     textAlign: 'center',
@@ -21,7 +21,7 @@ const Game = styled.div((props: { animation: boolean }) => ({
     height: '100vh',
     position: 'relative',
     '&::after': {
-        content: props.animation ? '""' : 'none',
+        content: props.isAnimation ? '""' : 'none',
         backgroundImage: 'url("src/img/pusheen.gif")',
         backgroundPosition: '50% 50%',
         backgroundRepeat: 'no-repeat',
@@ -52,29 +52,26 @@ type State = {
     sizeX: number;
     sizeY: number;
     cells: CellStatus[][];
-    animation: boolean;
+    isAnimation: boolean;
 };
 
 export class Field extends React.Component<Props, State> {
+    _isMounted = false;
+
     constructor(props: Props) {
         super(props);
         this.state = {
             sizeX: 10,
             sizeY: 10,
             cells: generateCells(10, 10),
-            animation: true,
+            isAnimation: true,
         };
     }
 
     handleChange = (event: any) => {
         const target = event.target;
         const name: string = target.name;
-        this.setState((prevState) => {
-            return {
-                ...prevState,
-                [name]: target.value,
-            };
-        });
+        this.setState({ ...this.state, [name]: target.value });
     };
 
     handleSubmit = (event: any) => {
@@ -130,14 +127,21 @@ export class Field extends React.Component<Props, State> {
     }
 
     componentDidMount(): void {
-        setTimeout(() => {
-            this.setState({ animation: false });
-        }, 3000);
+        this._isMounted = true;
+        if (this._isMounted) {
+            setTimeout(() => {
+                this.setState({ isAnimation: false });
+            }, 3000);
+        }
+    }
+
+    componentWillUnmount(): void {
+        this._isMounted = false;
     }
 
     render(): JSX.Element {
         return (
-            <Game animation={this.state.animation}>
+            <Game isAnimation={this.state.isAnimation}>
                 <h1>Game of Life</h1>
                 <Controls>
                     <form onSubmit={this.handleSubmit}>
@@ -146,14 +150,12 @@ export class Field extends React.Component<Props, State> {
                             value={this.state.sizeX}
                             name="sizeX"
                             onChange={this.handleChange}
-                            placeholder="X"
                         />
                         <input
                             type="number"
                             value={this.state.sizeY}
                             name="sizeY"
                             onChange={this.handleChange}
-                            placeholder="Y"
                         />
                         <input type="submit" placeholder="Generate Field" value="Generate field" />
                     </form>

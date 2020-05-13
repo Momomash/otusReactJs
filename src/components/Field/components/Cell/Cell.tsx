@@ -13,12 +13,12 @@ const CellDiv = styled.div((props: { status: CellStatus; isAnimation: boolean })
         props.status === CellStatus.Empty
             ? 'white'
             : props.status === CellStatus.Living
-            ? 'lawngreen'
-            : 'greenyellow',
-    border: '1px solid lightgray',
-    width: '20px',
-    height: '20px',
-    transitionDuration: props.isAnimation ? '1s' : '0s',
+            ? '#ebded3'
+            : '#584F4A',
+    border: '1px solid #FCF1E4',
+    width: '25px',
+    height: '25px',
+    transitionDuration: props.isAnimation ? '0.5s' : '0s',
 }));
 
 type Props = {

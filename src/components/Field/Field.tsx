@@ -7,8 +7,11 @@ const Game = styled.div((props: { isAnimation: boolean }) => ({
     flexDirection: 'column',
     textAlign: 'center',
     alignItems: 'center',
+    color: '#4D2A0C',
     height: '100vh',
     position: 'relative',
+    backgroundColor: '#fcf1e4',
+    fontFamily: 'Comic Sans MS',
     '&::after': {
         content: props.isAnimation ? '""' : 'none',
         backgroundImage: 'url("src/img/pusheen.gif")',
@@ -22,23 +25,87 @@ const Game = styled.div((props: { isAnimation: boolean }) => ({
         height: '100%',
     },
 }));
-const FieldContainer = styled.div`
-    background-color: white;
-    border: 2px solid gray;
-    width: max-content;
-`;
+const FieldContainer = styled.div(() => ({
+    backgroundColor: 'white',
+    border: '2px solid #4D2A0C',
+    width: 'max-content',
+}));
+const SmallInput = styled.input(() => ({
+    backgroundColor: '',
+    color: '#4D2A0C',
+    border: '2px solid #B5A99D',
+    borderRadius: '20px',
+    padding: '10px',
+    fontSize: '14px',
+    margin: '0 10px 5px 0',
+    width: '50px',
+    ':focus': {
+        transitionDuration: '0.3s',
+        borderColor: '#4D2A0C',
+    },
+}));
+const Input = styled.input(() => ({
+    backgroundColor: '',
+    color: '#4D2A0C',
+    border: '2px solid #B5A99D',
+    borderRadius: '20px',
+    padding: '10px',
+    fontSize: '14px',
+    margin: '0 10px 5px 0',
+    ':focus': {
+        transitionDuration: '0.3s',
+        borderColor: '#4D2A0C',
+    },
+}));
+const OutlineBtn = styled.button(() => ({
+    backgroundColor: '#B5A99D',
+    color: '#F9EBDE',
+    border: '2px solid #4D2A0C',
+    borderRadius: '20px',
+    padding: '10px',
+    fontSize: '14px',
+    marginRight: '10px',
+    ':hover': {
+        backgroundColor: '#4D2A0C',
+        transitionDuration: '0.3s',
+        color: '#F9EBDE',
+    },
+}));
+const Btn = styled.button(() => ({
+    backgroundColor: '#4D2A0C',
+    border: '2px solid #4D2A0C',
+    color: '#F9EBDE',
+    borderRadius: '20px',
+    padding: '10px',
+    fontSize: '14px',
+    marginRight: '10px',
+    ':hover': {
+        backgroundColor: '#6b513a',
+        transitionDuration: '0.3s',
+        color: '#F9EBDE',
+    },
+}));
+const BrownSubmit = styled.input(() => ({
+    backgroundColor: '#4D2A0C',
+    border: '2px solid #4D2A0C',
+    color: '#F9EBDE',
+    borderRadius: '20px',
+    padding: '10px',
+    fontSize: '14px',
+    marginRight: '10px',
+    ':hover': {
+        backgroundColor: '#6b513a',
+        transitionDuration: '0.3s',
+        color: '#F9EBDE',
+    },
+}));
 const Controls = styled.div`
     margin-bottom: 10px;
 `;
-
 const FieldRow = styled.div`
     display: flex;
     flex-direction: row;
 `;
-const Input = styled.input`
-    margin: 0 10px;
-`;
-
 const randomFilling = (arr: Array<Array<CellStatus>>, fullness: number): void => {
     for (let i = 0; i < arr.length; i++) {
         for (let j = 0; j < arr[i].length; j++) {
@@ -152,7 +219,7 @@ export class Field extends React.Component<Props, State> {
             isAnimation: true,
             interval: 0,
             ageCounter: 0,
-            playerName: '',
+            playerName: 'Momo',
         };
     }
 
@@ -167,6 +234,15 @@ export class Field extends React.Component<Props, State> {
             return {
                 ...prevState,
                 cells: this.regenerateCells(prevState.sizeX, prevState.sizeY, prevState.fullness),
+            };
+        });
+    };
+    handleSubmitAuthorization = (event: any) => {
+        event.preventDefault();
+        this.setState((prevState) => {
+            return {
+                ...prevState,
+                playerName: event.target.playerName,
             };
         });
     };
@@ -315,52 +391,56 @@ export class Field extends React.Component<Props, State> {
                         <Input
                             type="text"
                             placeholder="Enter your name"
+                            name="playerName"
                             onChange={this.handleChange}
                         />
-                        <input type="submit" placeholder="Start" value="Start" />
+                        <BrownSubmit type="submit" placeholder="Start" value="Start" />
                     </form>
                     <form onSubmit={this.handleSubmit}>
-                        <label>
-                            size X
-                            <Input
+                        <div>
+                            <SmallInput
                                 type="number"
                                 value={this.state.sizeX}
                                 name="sizeX"
                                 onChange={this.handleChange}
                             />
-                        </label>
-                        <label>
-                            size Y
-                            <Input
-                                type="number"
-                                value={this.state.sizeY}
-                                name="sizeY"
-                                onChange={this.handleChange}
+                            <label>
+                                X
+                                <SmallInput
+                                    type="number"
+                                    value={this.state.sizeY}
+                                    name="sizeY"
+                                    onChange={this.handleChange}
+                                />
+                            </label>
+                            <BrownSubmit
+                                type="submit"
+                                placeholder="Generate Field"
+                                value="Generate field"
                             />
-                        </label>
-                        <input type="submit" placeholder="Generate Field" value="Generate field" />
+                        </div>
                         <label>
                             fullness(%)
-                            <Input
+                            <SmallInput
                                 type="number"
                                 value={this.state.fullness}
                                 name="fullness"
                                 onChange={this.handleChange}
                             />
                         </label>
-                        <button onClick={this.randomlyFill}>Randomly fill cells</button>
+                        <Btn onClick={this.randomlyFill}>Randomly fill cells</Btn>
                         <div>
-                            <button onClick={this.runGame}>Start</button>
-                            <button onClick={this.pauseGame}>Pause</button>
-                            <button onClick={this.resetGame}>Reset</button>
-                            <button onClick={this.slowerGame}>Slower</button>
-                            <Input
+                            <OutlineBtn onClick={this.runGame}>Start</OutlineBtn>
+                            <OutlineBtn onClick={this.pauseGame}>Pause</OutlineBtn>
+                            <OutlineBtn onClick={this.resetGame}>Reset</OutlineBtn>
+                            <OutlineBtn onClick={this.slowerGame}>Slower</OutlineBtn>
+                            <SmallInput
                                 type="number"
                                 value={this.state.speed}
                                 name="speed"
                                 onChange={this.handleChange}
                             />
-                            <button onClick={this.fasterGame}>Faster</button>
+                            <OutlineBtn onClick={this.fasterGame}>Faster</OutlineBtn>
                         </div>
                     </form>
                 </Controls>

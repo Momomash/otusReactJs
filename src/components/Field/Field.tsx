@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from '@emotion/styled';
-import { CellStatus, Cell } from './components';
+import { Cell, CellStatus } from './components';
 
 const Game = styled.div((props: { isAnimation: boolean }) => ({
     display: 'flex',
@@ -66,6 +66,65 @@ const generateCells = (x: number, y: number, fullness: number): Array<Array<Cell
     return arr;
 };
 
+const generateAge = (arr: Array<Array<CellStatus>>): Array<Array<CellStatus>> => {
+    const newArray = JSON.parse(JSON.stringify(arr));
+    const currentIndex = (item: number) => {
+        let prev = item - 1;
+        let next = item + 1;
+        if (item == 0) {
+            prev = arr.length - 1;
+        } else if (item == arr.length - 1) {
+            next = 0;
+        }
+        return {
+            prev: prev,
+            next: next,
+            curr: item,
+        };
+    };
+    for (let i = 0; i < arr.length; i++) {
+        for (let j = 0; j < arr[i].length; j++) {
+            const y = currentIndex(i);
+            const x = currentIndex(j);
+            const MooreNeighborhood = [
+                arr[y.prev][x.prev],
+                arr[y.prev][x.curr],
+                arr[y.prev][x.next],
+                arr[y.curr][x.prev],
+                arr[y.curr][x.next],
+                arr[y.next][x.prev],
+                arr[y.next][x.curr],
+                arr[y.next][x.next],
+            ];
+            const livingCells = (arr: Array<CellStatus>): number => {
+                let result = 0;
+                for (let k = 0; k < arr.length; k++) {
+                    if (arr[k] === CellStatus.Living || arr[k] === CellStatus.Young) {
+                        result++;
+                    }
+                }
+                return result;
+            };
+            if (arr[i][j] === CellStatus.Empty) {
+                if (livingCells(MooreNeighborhood) === 3) {
+                    newArray[i][j] = CellStatus.Young;
+                }
+            }
+            if (arr[i][j] === CellStatus.Living || arr[i][j] === CellStatus.Young) {
+                if (livingCells(MooreNeighborhood) === 2 || livingCells(MooreNeighborhood) === 3) {
+                    newArray[i][j] = CellStatus.Living;
+                } else if (
+                    livingCells(MooreNeighborhood) < 2 ||
+                    livingCells(MooreNeighborhood) > 3
+                ) {
+                    newArray[i][j] = CellStatus.Empty;
+                }
+            }
+        }
+    }
+    return newArray;
+};
+
 type Props = {};
 type State = {
     sizeX: number;
@@ -73,6 +132,10 @@ type State = {
     fullness: number;
     cells: CellStatus[][];
     isAnimation: boolean;
+    speed: number;
+    interval: any;
+    ageCounter: number;
+    playerName: string;
 };
 
 export class Field extends React.Component<Props, State> {
@@ -85,7 +148,11 @@ export class Field extends React.Component<Props, State> {
             sizeY: 10,
             fullness: 30,
             cells: generateCells(10, 10, 30),
+            speed: 500,
             isAnimation: true,
+            interval: 0,
+            ageCounter: 0,
+            playerName: '',
         };
     }
 
@@ -94,7 +161,6 @@ export class Field extends React.Component<Props, State> {
         const name: string = target.name;
         this.setState({ ...this.state, [name]: target.value });
     };
-
     handleSubmit = (event: any) => {
         event.preventDefault();
         this.setState((prevState) => {
@@ -113,6 +179,69 @@ export class Field extends React.Component<Props, State> {
                 cells: newCells,
             };
         });
+    };
+    runGame = (event: any) => {
+        const interval = setInterval(() => {
+            this.setState((prevState) => {
+                return {
+                    ...prevState,
+                    cells: generateAge(prevState.cells),
+                    interval: interval,
+                    ageCounter: prevState.ageCounter + 1,
+                };
+            });
+        }, this.state.speed);
+    };
+    pauseGame = (event: any) => {
+        clearInterval(this.state.interval);
+    };
+    resetGame = (event: any) => {
+        const arr = Array.from(this.state.cells);
+        for (let i = 0; i < arr.length; i++) {
+            for (let j = 0; j < arr[i].length; j++) {
+                arr[i][j] = CellStatus.Empty;
+            }
+        }
+        this.setState((prevState) => {
+            return {
+                ...prevState,
+                cells: arr,
+                ageCounter: 0,
+            };
+        });
+    };
+    slowerGame = (event: any) => {
+        clearInterval(this.state.interval);
+        this.setState((prevState) => {
+            return {
+                ...prevState,
+                speed: prevState.speed + 500,
+            };
+        });
+        this.runGame(event);
+    };
+    fasterGame = (event: any) => {
+        if (this.state.speed > 500) {
+            clearInterval(this.state.interval);
+            this.setState((prevState) => {
+                return {
+                    ...prevState,
+                    speed: prevState.speed - 500,
+                };
+            });
+            this.runGame(event);
+        }
+    };
+
+    isGameOver = (arr: Array<Array<CellStatus>>): boolean => {
+        for (let i = 0; i < arr.length; i++) {
+            for (let j = 0; j < arr[i].length; j++) {
+                if (arr[i][j] != CellStatus.Empty) {
+                    return false;
+                }
+            }
+        }
+        return true;
     };
 
     regenerateCells(x: number, y: number, fullness: number): Array<Array<CellStatus>> {
@@ -166,6 +295,12 @@ export class Field extends React.Component<Props, State> {
         }
     }
 
+    componentDidUpdate(): void {
+        if (this.isGameOver(this.state.cells)) {
+            clearInterval(this.state.interval);
+        }
+    }
+
     componentWillUnmount(): void {
         this._isMounted = false;
     }
@@ -174,7 +309,16 @@ export class Field extends React.Component<Props, State> {
         return (
             <Game isAnimation={this.state.isAnimation}>
                 <h1>Game of Life</h1>
+                <h2>Player - {this.state.playerName}</h2>
                 <Controls>
+                    <form onSubmit={this.handleSubmitAuthorization}>
+                        <Input
+                            type="text"
+                            placeholder="Enter your name"
+                            onChange={this.handleChange}
+                        />
+                        <input type="submit" placeholder="Start" value="Start" />
+                    </form>
                     <form onSubmit={this.handleSubmit}>
                         <label>
                             size X
@@ -205,8 +349,22 @@ export class Field extends React.Component<Props, State> {
                             />
                         </label>
                         <button onClick={this.randomlyFill}>Randomly fill cells</button>
+                        <div>
+                            <button onClick={this.runGame}>Start</button>
+                            <button onClick={this.pauseGame}>Pause</button>
+                            <button onClick={this.resetGame}>Reset</button>
+                            <button onClick={this.slowerGame}>Slower</button>
+                            <Input
+                                type="number"
+                                value={this.state.speed}
+                                name="speed"
+                                onChange={this.handleChange}
+                            />
+                            <button onClick={this.fasterGame}>Faster</button>
+                        </div>
                     </form>
                 </Controls>
+                <div> Age - {this.state.ageCounter}</div>
                 <FieldContainer>
                     {this.state.cells.map((row: Array<CellStatus>, i: number) => (
                         <FieldRow key={'row' + i}>

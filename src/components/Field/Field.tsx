@@ -44,6 +44,7 @@ const SmallInput = styled.input(() => ({
         borderColor: '#4D2A0C',
     },
 }));
+SmallInput.displayName = 'SmallInput';
 const Input = styled.input(() => ({
     backgroundColor: '',
     color: '#4D2A0C',
@@ -57,6 +58,7 @@ const Input = styled.input(() => ({
         borderColor: '#4D2A0C',
     },
 }));
+Input.displayName = 'Input';
 const OutlineBtn = styled.button(() => ({
     backgroundColor: '#B5A99D',
     color: '#F9EBDE',
@@ -71,6 +73,7 @@ const OutlineBtn = styled.button(() => ({
         color: '#F9EBDE',
     },
 }));
+OutlineBtn.displayName = 'OutlineBtn';
 const Btn = styled.button(() => ({
     backgroundColor: '#4D2A0C',
     border: '2px solid #4D2A0C',
@@ -85,6 +88,7 @@ const Btn = styled.button(() => ({
         color: '#F9EBDE',
     },
 }));
+Btn.displayName = 'Btn';
 const BrownSubmit = styled.input(() => ({
     backgroundColor: '#4D2A0C',
     border: '2px solid #4D2A0C',
@@ -99,6 +103,7 @@ const BrownSubmit = styled.input(() => ({
         color: '#F9EBDE',
     },
 }));
+BrownSubmit.displayName = 'BrownSubmit';
 const Controls = styled.div`
     margin-bottom: 10px;
 `;
@@ -106,7 +111,7 @@ const FieldRow = styled.div`
     display: flex;
     flex-direction: row;
 `;
-const randomFilling = (arr: Array<Array<CellStatus>>, fullness: number): void => {
+export const randomFilling = (arr: Array<Array<CellStatus>>, fullness: number): void => {
     for (let i = 0; i < arr.length; i++) {
         for (let j = 0; j < arr[i].length; j++) {
             arr[i][j] = CellStatus.Empty;
@@ -133,7 +138,7 @@ const generateCells = (x: number, y: number, fullness: number): Array<Array<Cell
     return arr;
 };
 
-const generateAge = (arr: Array<Array<CellStatus>>): Array<Array<CellStatus>> => {
+export const generateAge = (arr: Array<Array<CellStatus>>): Array<Array<CellStatus>> => {
     const newArray = JSON.parse(JSON.stringify(arr));
     const currentIndex = (item: number) => {
         let prev = item - 1;
@@ -394,7 +399,12 @@ export class Field extends React.Component<Props, State> {
                             name="playerName"
                             onChange={this.handleChange}
                         />
-                        <BrownSubmit type="submit" placeholder="Start" value="Start" />
+                        <BrownSubmit
+                            type="submit"
+                            name="playerNameSubmit"
+                            placeholder="Start"
+                            value="Start"
+                        />
                     </form>
                     <form onSubmit={this.handleSubmit}>
                         <div>
@@ -417,6 +427,7 @@ export class Field extends React.Component<Props, State> {
                                 type="submit"
                                 placeholder="Generate Field"
                                 value="Generate field"
+                                name="generateField"
                             />
                         </div>
                         <label>
@@ -428,19 +439,29 @@ export class Field extends React.Component<Props, State> {
                                 onChange={this.handleChange}
                             />
                         </label>
-                        <Btn onClick={this.randomlyFill}>Randomly fill cells</Btn>
+                        <Btn name="randomlyFillButton" onClick={this.randomlyFill}>
+                            Randomly fill cells
+                        </Btn>
                         <div>
-                            <OutlineBtn onClick={this.runGame}>Start</OutlineBtn>
-                            <OutlineBtn onClick={this.pauseGame}>Pause</OutlineBtn>
-                            <OutlineBtn onClick={this.resetGame}>Reset</OutlineBtn>
-                            <OutlineBtn onClick={this.slowerGame}>Slower</OutlineBtn>
+                            <OutlineBtn name="runGame" onClick={this.runGame}>
+                                Start
+                            </OutlineBtn>
+                            <OutlineBtn name="pauseGame" onClick={this.pauseGame}>
+                                Pause
+                            </OutlineBtn>
+                            <OutlineBtn name="resetGame" onClick={this.resetGame}>
+                                Reset
+                            </OutlineBtn>
+                            <OutlineBtn name="slowerGame" onClick={this.slowerGame}>
+                                Slower
+                            </OutlineBtn>
                             <SmallInput
                                 type="number"
                                 value={this.state.speed}
                                 name="speed"
                                 onChange={this.handleChange}
                             />
-                            <OutlineBtn onClick={this.fasterGame}>Faster</OutlineBtn>
+                            <OutlineBtn name="fasterGame" onClick={this.fasterGame}>Faster</OutlineBtn>
                         </div>
                     </form>
                 </Controls>

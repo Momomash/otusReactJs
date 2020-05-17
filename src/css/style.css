@@ -1,0 +1,12 @@
+body {
+    margin: 0;
+}
+
+:hover {
+    cursor: url('../img/paw.png') 0 0, auto;
+    outline: 0;
+}
+
+:focus {
+    outline: 0;
+}

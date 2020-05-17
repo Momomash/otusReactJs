@@ -1,58 +1,29 @@
 import * as React from 'react';
-import styled from '@emotion/styled';
-import { CellStatus, Cell } from './components';
-
-const generateCells = (x: number, y: number): Array<Array<CellStatus>> => {
-    const arr: Array<Array<CellStatus>> = [];
-    for (let i = y - 1; i >= 0; i--) {
-        arr[i] = [];
-        for (let j = x - 1; j >= 0; j--) {
-            arr[i][j] = CellStatus.Empty;
-        }
-    }
-    return arr;
-};
-
-const Game = styled.div((props: { isAnimation: boolean }) => ({
-    display: 'flex',
-    flexDirection: 'column',
-    textAlign: 'center',
-    alignItems: 'center',
-    height: '100vh',
-    position: 'relative',
-    '&::after': {
-        content: props.isAnimation ? '""' : 'none',
-        backgroundImage: 'url("src/img/pusheen.gif")',
-        backgroundPosition: '50% 50%',
-        backgroundRepeat: 'no-repeat',
-        backgroundColor: '#fcf1e4',
-        position: 'absolute',
-        top: '0',
-        left: '0',
-        width: '100%',
-        height: '100%',
-    },
-}));
-const FieldContainer = styled.div`
-    background-color: white;
-    border: 2px solid gray;
-    width: max-content;
-`;
-const Controls = styled.div`
-    margin-bottom: 10px;
-`;
-
-const FieldRow = styled.div`
-    display: flex;
-    flex-direction: row;
-`;
+import { Cell, CellStatus } from './components';
+import {
+    Game,
+    FieldContainer,
+    SmallInput,
+    Input,
+    OutlineBtn,
+    Btn,
+    BrownSubmit,
+    Controls,
+    FieldRow,
+} from './emotionWrappers';
+import { randomFilling, generateCells, generateAge } from './helpers';
 
 type Props = {};
 type State = {
     sizeX: number;
     sizeY: number;
+    fullness: number;
     cells: CellStatus[][];
     isAnimation: boolean;
+    delay: number;
+    interval: any;
+    ageCounter: number;
+    playerName: string;
 };
 
 export class Field extends React.Component<Props, State> {
@@ -63,8 +34,13 @@ export class Field extends React.Component<Props, State> {
         this.state = {
             sizeX: 10,
             sizeY: 10,
-            cells: generateCells(10, 10),
+            fullness: 30,
+            cells: generateCells(10, 10, 30),
+            delay: 500,
             isAnimation: true,
+            interval: 0,
+            ageCounter: 0,
+            playerName: 'Momo',
         };
     }
 
@@ -73,18 +49,89 @@ export class Field extends React.Component<Props, State> {
         const name: string = target.name;
         this.setState({ ...this.state, [name]: target.value });
     };
-
     handleSubmit = (event: any) => {
         event.preventDefault();
         this.setState((prevState) => {
             return {
                 ...prevState,
-                cells: this.regenerateCells(prevState.sizeX, prevState.sizeY),
+                cells: this.regenerateCells(prevState.sizeX, prevState.sizeY, prevState.fullness),
             };
         });
     };
+    handleSubmitAuthorization = (event: any) => {
+        event.preventDefault();
+        this.setState({ playerName: event.target.playerName });
+    };
+    randomlyFill = (event: any) => {
+        this.setState((prevState) => {
+            const newCells = Array.from(prevState.cells);
+            randomFilling(newCells, prevState.fullness);
+            return {
+                cells: newCells,
+            };
+        });
+    };
+    runGame = (event: any) => {
+        const interval = setInterval(() => {
+            this.setState((prevState) => {
+                return {
+                    cells: generateAge(prevState.cells),
+                    interval: interval,
+                    ageCounter: prevState.ageCounter + 1,
+                };
+            });
+        }, this.state.delay);
+    };
+    pauseGame = (event: any) => {
+        clearInterval(this.state.interval);
+    };
+    resetGame = (event: any) => {
+        const arr = Array.from(this.state.cells);
+        for (let i = 0; i < arr.length; i++) {
+            for (let j = 0; j < arr[i].length; j++) {
+                arr[i][j] = CellStatus.Empty;
+            }
+        }
+        this.setState(() => {
+            return {
+                cells: arr,
+                ageCounter: 0,
+            };
+        });
+    };
+    slowerGame = (event: any) => {
+        clearInterval(this.state.interval);
+        this.setState((prevState) => {
+            return {
+                delay: prevState.delay + 500,
+            };
+        });
+        this.runGame(event);
+    };
+    fasterGame = (event: any) => {
+        if (this.state.delay > 500) {
+            clearInterval(this.state.interval);
+            this.setState((prevState) => {
+                return {
+                    delay: prevState.delay - 500,
+                };
+            });
+            this.runGame(event);
+        }
+    };
 
-    regenerateCells(x: number, y: number): Array<Array<CellStatus>> {
+    isGameOver = (arr: Array<Array<CellStatus>>): boolean => {
+        for (let i = 0; i < arr.length; i++) {
+            for (let j = 0; j < arr[i].length; j++) {
+                if (arr[i][j] != CellStatus.Empty) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    };
+
+    regenerateCells(x: number, y: number, fullness: number): Array<Array<CellStatus>> {
         const lastArr = this.state.cells;
         const cellsX = this.state.cells[0].length;
         const cellsY = this.state.cells.length;
@@ -119,8 +166,8 @@ export class Field extends React.Component<Props, State> {
     toggleStatus(i: number, j: number): void {
         const cells = Array.from(this.state.cells);
         if (this.state.cells[i][j] === CellStatus.Empty) {
-            cells[i][j] = CellStatus.Living;
-        } else if (this.state.cells[i][j] === CellStatus.Living) {
+            cells[i][j] = CellStatus.Young;
+        } else {
             cells[i][j] = CellStatus.Empty;
         }
         this.setState({ cells: cells });
@@ -131,7 +178,13 @@ export class Field extends React.Component<Props, State> {
         if (this._isMounted) {
             setTimeout(() => {
                 this.setState({ isAnimation: false });
-            }, 3000);
+            }, 1000);
+        }
+    }
+
+    componentDidUpdate(): void {
+        if (this.isGameOver(this.state.cells)) {
+            clearInterval(this.state.interval);
         }
     }
 
@@ -143,23 +196,84 @@ export class Field extends React.Component<Props, State> {
         return (
             <Game isAnimation={this.state.isAnimation}>
                 <h1>Game of Life</h1>
+                <h2>Player - {this.state.playerName}</h2>
                 <Controls>
+                    <form onSubmit={this.handleSubmitAuthorization}>
+                        <Input
+                            type="text"
+                            placeholder="Enter your name"
+                            name="playerName"
+                            onChange={this.handleChange}
+                        />
+                        <BrownSubmit
+                            type="submit"
+                            name="playerNameSubmit"
+                            placeholder="Start"
+                            value="Start"
+                        />
+                    </form>
                     <form onSubmit={this.handleSubmit}>
-                        <input
-                            type="number"
-                            value={this.state.sizeX}
-                            name="sizeX"
-                            onChange={this.handleChange}
-                        />
-                        <input
-                            type="number"
-                            value={this.state.sizeY}
-                            name="sizeY"
-                            onChange={this.handleChange}
-                        />
-                        <input type="submit" placeholder="Generate Field" value="Generate field" />
+                        <div>
+                            <SmallInput
+                                type="number"
+                                value={this.state.sizeX}
+                                name="sizeX"
+                                onChange={this.handleChange}
+                            />
+                            <label>
+                                X
+                                <SmallInput
+                                    type="number"
+                                    value={this.state.sizeY}
+                                    name="sizeY"
+                                    onChange={this.handleChange}
+                                />
+                            </label>
+                            <BrownSubmit
+                                type="submit"
+                                placeholder="Generate Field"
+                                value="Generate field"
+                                name="generateField"
+                            />
+                        </div>
+                        <label>
+                            fullness(%)
+                            <SmallInput
+                                type="number"
+                                value={this.state.fullness}
+                                name="fullness"
+                                onChange={this.handleChange}
+                            />
+                        </label>
+                        <Btn name="randomlyFillButton" onClick={this.randomlyFill}>
+                            Randomly fill cells
+                        </Btn>
+                        <div>
+                            <OutlineBtn name="runGame" onClick={this.runGame}>
+                                Start
+                            </OutlineBtn>
+                            <OutlineBtn name="pauseGame" onClick={this.pauseGame}>
+                                Pause
+                            </OutlineBtn>
+                            <OutlineBtn name="resetGame" onClick={this.resetGame}>
+                                Reset
+                            </OutlineBtn>
+                            <OutlineBtn name="slowerGame" onClick={this.slowerGame}>
+                                Slower
+                            </OutlineBtn>
+                            <SmallInput
+                                type="number"
+                                value={this.state.delay}
+                                name="delay"
+                                onChange={this.handleChange}
+                            />
+                            <OutlineBtn name="fasterGame" onClick={this.fasterGame}>
+                                Faster
+                            </OutlineBtn>
+                        </div>
                     </form>
                 </Controls>
+                <div> Age - {this.state.ageCounter}</div>
                 <FieldContainer>
                     {this.state.cells.map((row: Array<CellStatus>, i: number) => (
                         <FieldRow key={'row' + i}>

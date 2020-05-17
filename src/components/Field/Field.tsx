@@ -1,201 +1,17 @@
 import * as React from 'react';
-import styled from '@emotion/styled';
 import { Cell, CellStatus } from './components';
-
-const Game = styled.div((props: { isAnimation: boolean }) => ({
-    display: 'flex',
-    flexDirection: 'column',
-    textAlign: 'center',
-    alignItems: 'center',
-    color: '#4D2A0C',
-    height: '100vh',
-    position: 'relative',
-    backgroundColor: '#fcf1e4',
-    fontFamily: 'Comic Sans MS',
-    '&::after': {
-        content: props.isAnimation ? '""' : 'none',
-        backgroundImage: 'url("src/img/pusheen.gif")',
-        backgroundPosition: '50% 50%',
-        backgroundRepeat: 'no-repeat',
-        backgroundColor: '#fcf1e4',
-        position: 'absolute',
-        top: '0',
-        left: '0',
-        width: '100%',
-        height: '100%',
-    },
-}));
-const FieldContainer = styled.div(() => ({
-    backgroundColor: 'white',
-    border: '2px solid #4D2A0C',
-    width: 'max-content',
-}));
-const SmallInput = styled.input(() => ({
-    backgroundColor: '',
-    color: '#4D2A0C',
-    border: '2px solid #B5A99D',
-    borderRadius: '20px',
-    padding: '10px',
-    fontSize: '14px',
-    margin: '0 10px 5px 0',
-    width: '50px',
-    ':focus': {
-        transitionDuration: '0.3s',
-        borderColor: '#4D2A0C',
-    },
-}));
-SmallInput.displayName = 'SmallInput';
-const Input = styled.input(() => ({
-    backgroundColor: '',
-    color: '#4D2A0C',
-    border: '2px solid #B5A99D',
-    borderRadius: '20px',
-    padding: '10px',
-    fontSize: '14px',
-    margin: '0 10px 5px 0',
-    ':focus': {
-        transitionDuration: '0.3s',
-        borderColor: '#4D2A0C',
-    },
-}));
-Input.displayName = 'Input';
-const OutlineBtn = styled.button(() => ({
-    backgroundColor: '#B5A99D',
-    color: '#F9EBDE',
-    border: '2px solid #4D2A0C',
-    borderRadius: '20px',
-    padding: '10px',
-    fontSize: '14px',
-    marginRight: '10px',
-    ':hover': {
-        backgroundColor: '#4D2A0C',
-        transitionDuration: '0.3s',
-        color: '#F9EBDE',
-    },
-}));
-OutlineBtn.displayName = 'OutlineBtn';
-const Btn = styled.button(() => ({
-    backgroundColor: '#4D2A0C',
-    border: '2px solid #4D2A0C',
-    color: '#F9EBDE',
-    borderRadius: '20px',
-    padding: '10px',
-    fontSize: '14px',
-    marginRight: '10px',
-    ':hover': {
-        backgroundColor: '#6b513a',
-        transitionDuration: '0.3s',
-        color: '#F9EBDE',
-    },
-}));
-Btn.displayName = 'Btn';
-const BrownSubmit = styled.input(() => ({
-    backgroundColor: '#4D2A0C',
-    border: '2px solid #4D2A0C',
-    color: '#F9EBDE',
-    borderRadius: '20px',
-    padding: '10px',
-    fontSize: '14px',
-    marginRight: '10px',
-    ':hover': {
-        backgroundColor: '#6b513a',
-        transitionDuration: '0.3s',
-        color: '#F9EBDE',
-    },
-}));
-BrownSubmit.displayName = 'BrownSubmit';
-const Controls = styled.div`
-    margin-bottom: 10px;
-`;
-const FieldRow = styled.div`
-    display: flex;
-    flex-direction: row;
-`;
-export const randomFilling = (arr: Array<Array<CellStatus>>, fullness: number): void => {
-    for (let i = 0; i < arr.length; i++) {
-        for (let j = 0; j < arr[i].length; j++) {
-            arr[i][j] = CellStatus.Empty;
-        }
-    }
-
-    let randomCells = Math.round((arr.length * arr[0].length * fullness) / 100);
-    for (randomCells; randomCells > 0; randomCells--) {
-        const randomRow = arr[Math.floor(Math.random() * arr.length)];
-        const randomCol = Math.floor(Math.random() * randomRow.length);
-        randomRow[randomCol] = CellStatus.Young;
-    }
-};
-
-const generateCells = (x: number, y: number, fullness: number): Array<Array<CellStatus>> => {
-    const arr: Array<Array<CellStatus>> = [];
-    for (let i = y - 1; i >= 0; i--) {
-        arr[i] = [];
-        for (let j = x - 1; j >= 0; j--) {
-            arr[i][j] = CellStatus.Empty;
-        }
-    }
-    randomFilling(arr, fullness);
-    return arr;
-};
-
-export const generateAge = (arr: Array<Array<CellStatus>>): Array<Array<CellStatus>> => {
-    const newArray = JSON.parse(JSON.stringify(arr));
-    const currentIndex = (item: number) => {
-        let prev = item - 1;
-        let next = item + 1;
-        if (item == 0) {
-            prev = arr.length - 1;
-        } else if (item == arr.length - 1) {
-            next = 0;
-        }
-        return {
-            prev: prev,
-            next: next,
-            curr: item,
-        };
-    };
-    for (let i = 0; i < arr.length; i++) {
-        for (let j = 0; j < arr[i].length; j++) {
-            const y = currentIndex(i);
-            const x = currentIndex(j);
-            const MooreNeighborhood = [
-                arr[y.prev][x.prev],
-                arr[y.prev][x.curr],
-                arr[y.prev][x.next],
-                arr[y.curr][x.prev],
-                arr[y.curr][x.next],
-                arr[y.next][x.prev],
-                arr[y.next][x.curr],
-                arr[y.next][x.next],
-            ];
-            const livingCells = (arr: Array<CellStatus>): number => {
-                let result = 0;
-                for (let k = 0; k < arr.length; k++) {
-                    if (arr[k] === CellStatus.Living || arr[k] === CellStatus.Young) {
-                        result++;
-                    }
-                }
-                return result;
-            };
-            if (arr[i][j] === CellStatus.Empty) {
-                if (livingCells(MooreNeighborhood) === 3) {
-                    newArray[i][j] = CellStatus.Young;
-                }
-            }
-            if (arr[i][j] === CellStatus.Living || arr[i][j] === CellStatus.Young) {
-                if (livingCells(MooreNeighborhood) === 2 || livingCells(MooreNeighborhood) === 3) {
-                    newArray[i][j] = CellStatus.Living;
-                } else if (
-                    livingCells(MooreNeighborhood) < 2 ||
-                    livingCells(MooreNeighborhood) > 3
-                ) {
-                    newArray[i][j] = CellStatus.Empty;
-                }
-            }
-        }
-    }
-    return newArray;
-};
+import {
+    Game,
+    FieldContainer,
+    SmallInput,
+    Input,
+    OutlineBtn,
+    Btn,
+    BrownSubmit,
+    Controls,
+    FieldRow,
+} from './emotionWrappers';
+import { randomFilling, generateCells, generateAge } from './helpers';
 
 type Props = {};
 type State = {
@@ -204,7 +20,7 @@ type State = {
     fullness: number;
     cells: CellStatus[][];
     isAnimation: boolean;
-    speed: number;
+    delay: number;
     interval: any;
     ageCounter: number;
     playerName: string;
@@ -220,7 +36,7 @@ export class Field extends React.Component<Props, State> {
             sizeY: 10,
             fullness: 30,
             cells: generateCells(10, 10, 30),
-            speed: 500,
+            delay: 500,
             isAnimation: true,
             interval: 0,
             ageCounter: 0,
@@ -244,19 +60,13 @@ export class Field extends React.Component<Props, State> {
     };
     handleSubmitAuthorization = (event: any) => {
         event.preventDefault();
-        this.setState((prevState) => {
-            return {
-                ...prevState,
-                playerName: event.target.playerName,
-            };
-        });
+        this.setState({ playerName: event.target.playerName });
     };
     randomlyFill = (event: any) => {
         this.setState((prevState) => {
             const newCells = Array.from(prevState.cells);
             randomFilling(newCells, prevState.fullness);
             return {
-                ...prevState,
                 cells: newCells,
             };
         });
@@ -265,13 +75,12 @@ export class Field extends React.Component<Props, State> {
         const interval = setInterval(() => {
             this.setState((prevState) => {
                 return {
-                    ...prevState,
                     cells: generateAge(prevState.cells),
                     interval: interval,
                     ageCounter: prevState.ageCounter + 1,
                 };
             });
-        }, this.state.speed);
+        }, this.state.delay);
     };
     pauseGame = (event: any) => {
         clearInterval(this.state.interval);
@@ -283,9 +92,8 @@ export class Field extends React.Component<Props, State> {
                 arr[i][j] = CellStatus.Empty;
             }
         }
-        this.setState((prevState) => {
+        this.setState(() => {
             return {
-                ...prevState,
                 cells: arr,
                 ageCounter: 0,
             };
@@ -295,19 +103,17 @@ export class Field extends React.Component<Props, State> {
         clearInterval(this.state.interval);
         this.setState((prevState) => {
             return {
-                ...prevState,
-                speed: prevState.speed + 500,
+                delay: prevState.delay + 500,
             };
         });
         this.runGame(event);
     };
     fasterGame = (event: any) => {
-        if (this.state.speed > 500) {
+        if (this.state.delay > 500) {
             clearInterval(this.state.interval);
             this.setState((prevState) => {
                 return {
-                    ...prevState,
-                    speed: prevState.speed - 500,
+                    delay: prevState.delay - 500,
                 };
             });
             this.runGame(event);
@@ -457,11 +263,13 @@ export class Field extends React.Component<Props, State> {
                             </OutlineBtn>
                             <SmallInput
                                 type="number"
-                                value={this.state.speed}
-                                name="speed"
+                                value={this.state.delay}
+                                name="delay"
                                 onChange={this.handleChange}
                             />
-                            <OutlineBtn name="fasterGame" onClick={this.fasterGame}>Faster</OutlineBtn>
+                            <OutlineBtn name="fasterGame" onClick={this.fasterGame}>
+                                Faster
+                            </OutlineBtn>
                         </div>
                     </form>
                 </Controls>

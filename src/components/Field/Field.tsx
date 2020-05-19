@@ -153,7 +153,7 @@ export class Field extends React.Component<Props, State> {
         return lastArr;
     }
 
-    toggleStatus(i: number, j: number): void {
+    toggleStatus = (i: number, j: number): void => {
         const cells = Array.from(this.state.cells);
         if (this.state.cells[i][j] === CellStatus.Empty) {
             cells[i][j] = CellStatus.Young;
@@ -161,7 +161,7 @@ export class Field extends React.Component<Props, State> {
             cells[i][j] = CellStatus.Empty;
         }
         this.setState({ cells: cells });
-    }
+    };
 
     componentDidMount(): void {
         this._isMounted = true;
@@ -211,7 +211,9 @@ export class Field extends React.Component<Props, State> {
                                     <Cell
                                         key={'row' + i + 'col' + j}
                                         status={status}
-                                        onClick={(): void => this.toggleStatus(i, j)}
+                                        onClick={this.toggleStatus}
+                                        coordinateY={i}
+                                        coordinateX={j}
                                     />
                                 );
                             })}

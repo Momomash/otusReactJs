@@ -3,9 +3,9 @@
 exports[`Cell render Empty Cell 1`] = `
 .emotion-0 {
   background-color: white;
-  border: 1px solid lightgray;
-  width: 20px;
-  height: 20px;
+  border: 1px solid #FCF1E4;
+  width: 25px;
+  height: 25px;
   -webkit-transition-duration: 0s;
   transition-duration: 0s;
 }
@@ -18,10 +18,12 @@ exports[`Cell render Empty Cell 1`] = `
 
 exports[`Cell render Living Cell 1`] = `
 .emotion-0 {
-  background-color: lawngreen;
-  border: 1px solid lightgray;
-  width: 20px;
-  height: 20px;
+  background-color: #ebded3;
+  border: 1px solid #FCF1E4;
+  width: 25px;
+  height: 25px;
+  -webkit-transition-duration: 0s;
+  transition-duration: 0s;
 }
 
 <div

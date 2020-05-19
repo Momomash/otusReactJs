@@ -3,6 +3,7 @@ import { Cell, CellStatus } from './components';
 import { Controls } from './components';
 import { Game, FieldContainer, FieldRow } from './emotionWrappers';
 import { randomFilling, generateCells, generateAge } from './helpers';
+
 type Props = {};
 type State = {
     sizeX: number;
@@ -18,22 +19,17 @@ type State = {
 
 export class Field extends React.Component<Props, State> {
     _isMounted = false;
-
-    constructor(props: Props) {
-        super(props);
-        this.state = {
-            sizeX: 10,
-            sizeY: 10,
-            fullness: 30,
-            cells: generateCells(10, 10, 30),
-            delay: 500,
-            isAnimation: true,
-            interval: 0,
-            ageCounter: 0,
-            playerName: 'Momo',
-        };
-    }
-
+    state = {
+        sizeX: 10,
+        sizeY: 10,
+        fullness: 30,
+        cells: generateCells(10, 10, 30),
+        delay: 500,
+        isAnimation: true,
+        interval: 0,
+        ageCounter: 0,
+        playerName: 'Momo',
+    };
     handleChange = (event: any): void => {
         const target = event.target;
         const name: string = target.name;

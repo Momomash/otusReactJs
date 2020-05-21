@@ -85,7 +85,7 @@ export class Field extends React.Component<Props, State> {
             };
         });
     };
-    slowerGame = (event: any): void => {
+    slowerGame = (event: any) => {
         clearInterval(this.state.interval);
         this.setState((prevState) => {
             return {
@@ -94,7 +94,7 @@ export class Field extends React.Component<Props, State> {
         });
         this.runGame(event);
     };
-    fasterGame = (event: any): void => {
+    fasterGame = (event: any) => {
         if (this.state.delay > 500) {
             clearInterval(this.state.interval);
             this.setState((prevState) => {
@@ -198,7 +198,7 @@ export class Field extends React.Component<Props, State> {
                     slowerGame={this.slowerGame}
                     fasterGame={this.fasterGame}
                 />
-                <div> Age - {this.state.ageCounter}</div>;
+                <div> Age - {this.state.ageCounter}</div>
                 <FieldContainer>
                     {this.state.cells.map((row: Array<CellStatus>, i: number) => (
                         <FieldRow key={'row' + i}>
@@ -216,7 +216,6 @@ export class Field extends React.Component<Props, State> {
                         </FieldRow>
                     ))}
                 </FieldContainer>
-                ;
             </Game>
         );
     }

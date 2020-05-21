@@ -15,6 +15,7 @@ export const SmallInput = styled.input(() => ({
     },
 }));
 SmallInput.displayName = 'SmallInput';
+
 export const Input = styled.input(() => ({
     backgroundColor: '',
     color: '#4D2A0C',
@@ -29,6 +30,7 @@ export const Input = styled.input(() => ({
     },
 }));
 Input.displayName = 'Input';
+
 export const OutlineBtn = styled.button(() => ({
     backgroundColor: '#B5A99D',
     color: '#F9EBDE',
@@ -44,6 +46,7 @@ export const OutlineBtn = styled.button(() => ({
     },
 }));
 OutlineBtn.displayName = 'OutlineBtn';
+
 export const Btn = styled.button(() => ({
     backgroundColor: '#4D2A0C',
     border: '2px solid #4D2A0C',
@@ -59,6 +62,7 @@ export const Btn = styled.button(() => ({
     },
 }));
 Btn.displayName = 'Btn';
+
 export const BrownSubmit = styled.input(() => ({
     backgroundColor: '#4D2A0C',
     border: '2px solid #4D2A0C',

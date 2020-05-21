@@ -1,33 +1,5 @@
 import styled from '@emotion/styled';
-
-export const Game = styled.div((props: { isAnimation: boolean }) => ({
-    display: 'flex',
-    flexDirection: 'column',
-    textAlign: 'center',
-    alignItems: 'center',
-    color: '#4D2A0C',
-    height: '100vh',
-    position: 'relative',
-    backgroundColor: '#fcf1e4',
-    fontFamily: 'Comic Sans MS',
-    '&::after': {
-        content: props.isAnimation ? '""' : 'none',
-        backgroundImage: 'url("src/img/pusheen.gif")',
-        backgroundPosition: '50% 50%',
-        backgroundRepeat: 'no-repeat',
-        backgroundColor: '#fcf1e4',
-        position: 'absolute',
-        top: '0',
-        left: '0',
-        width: '100%',
-        height: '100%',
-    },
-}));
-export const FieldContainer = styled.div(() => ({
-    backgroundColor: 'white',
-    border: '2px solid #4D2A0C',
-    width: 'max-content',
-}));
+export const ControlsWrapper = styled.div``;
 export const SmallInput = styled.input(() => ({
     backgroundColor: '',
     color: '#4D2A0C',
@@ -43,6 +15,7 @@ export const SmallInput = styled.input(() => ({
     },
 }));
 SmallInput.displayName = 'SmallInput';
+
 export const Input = styled.input(() => ({
     backgroundColor: '',
     color: '#4D2A0C',
@@ -57,6 +30,7 @@ export const Input = styled.input(() => ({
     },
 }));
 Input.displayName = 'Input';
+
 export const OutlineBtn = styled.button(() => ({
     backgroundColor: '#B5A99D',
     color: '#F9EBDE',
@@ -72,6 +46,7 @@ export const OutlineBtn = styled.button(() => ({
     },
 }));
 OutlineBtn.displayName = 'OutlineBtn';
+
 export const Btn = styled.button(() => ({
     backgroundColor: '#4D2A0C',
     border: '2px solid #4D2A0C',
@@ -87,6 +62,7 @@ export const Btn = styled.button(() => ({
     },
 }));
 Btn.displayName = 'Btn';
+
 export const BrownSubmit = styled.input(() => ({
     backgroundColor: '#4D2A0C',
     border: '2px solid #4D2A0C',

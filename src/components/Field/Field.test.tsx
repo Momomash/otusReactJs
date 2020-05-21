@@ -3,7 +3,6 @@ import { mount } from 'enzyme';
 import { Field } from './Field';
 import { generateAge } from './helpers';
 import { CellStatus } from './components/Cell';
-//const sleep = (x: number) => new Promise((r) => setTimeout(r, x));
 describe('Field test', () => {
     const wrapper = mount(<Field />);
     let cells: Array<Array<CellStatus>> = wrapper.state('cells');

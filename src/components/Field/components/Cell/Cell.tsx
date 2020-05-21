@@ -23,7 +23,9 @@ const CellDiv = styled.div((props: { status: CellStatus; isAnimation: boolean })
 
 type Props = {
     status: CellStatus;
-    onClick: () => void;
+    onClick: (i: number, j: number) => void;
+    coordinateY: number;
+    coordinateX: number;
 };
 type State = {
     isAnimation: boolean;
@@ -31,6 +33,7 @@ type State = {
 
 export class Cell extends React.Component<Props, State> {
     state = { isAnimation: false };
+
     componentDidUpdate(prevProps: Props): void {
         const { status } = this.props;
         if (prevProps.status !== status) {
@@ -41,12 +44,16 @@ export class Cell extends React.Component<Props, State> {
             }
         }
     }
+    onClick = () => {
+        this.props.onClick(this.props.coordinateY, this.props.coordinateX);
+    };
+
     render(): JSX.Element {
         return (
             <CellDiv
                 isAnimation={this.state.isAnimation}
                 status={this.props.status}
-                onClick={(): void => this.props.onClick()}
+                onClick={this.onClick}
             />
         );
     }

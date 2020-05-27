@@ -92,7 +92,8 @@
     "loki": "0.20.3",
     "react": "16.13.1",
     "react-docgen-typescript-loader": "3.7.2",
-    "react-dom": "16.13.1"
+    "react-dom": "16.13.1",
+    "react-router-dom": "^5.2.0"
   },
   "loki": {
     "configurations": {

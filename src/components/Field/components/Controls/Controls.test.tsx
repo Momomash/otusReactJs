@@ -26,10 +26,6 @@ describe('Controls test', () => {
         wrapper.find('Input[name="playerName"]').simulate('change');
         expect(Function).toHaveBeenCalled();
     });
-    it('check playerName submit', () => {
-        wrapper.find('BrownSubmit[name="playerNameSubmit"]').simulate('submit');
-        expect(Function).toHaveBeenCalled();
-    });
     it('check sizeX input', () => {
         wrapper.find('SmallInput[name="sizeX"]').simulate('change');
         expect(Function).toHaveBeenCalled();

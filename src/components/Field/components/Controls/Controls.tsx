@@ -13,7 +13,6 @@ type Props = {
     sizeY: number;
     fullness: number;
     delay: number;
-    handleSubmitAuthorization: (event: any) => void;
     handleChange: (event: any) => void;
     handleSubmit: (event: any) => void;
     randomlyFill: (event: any) => void;
@@ -29,20 +28,6 @@ export class Controls extends React.Component<Props, State> {
     render(): JSX.Element {
         return (
             <ControlsWrapper>
-                <form onSubmit={this.props.handleSubmitAuthorization}>
-                    <Input
-                        type="text"
-                        placeholder="Enter your name"
-                        name="playerName"
-                        onChange={this.props.handleChange}
-                    />
-                    <BrownSubmit
-                        type="submit"
-                        name="playerNameSubmit"
-                        placeholder="Start"
-                        value="Start"
-                    />
-                </form>
                 <form onSubmit={this.props.handleSubmit}>
                     <div>
                         <SmallInput

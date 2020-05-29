@@ -8,19 +8,7 @@ export const Game = styled.div((props: { isAnimation: boolean }) => ({
     color: '#4D2A0C',
     minHeight: '90vh',
     position: 'relative',
-    backgroundColor: '#fcf1e4',
-    '&::after': {
-        content: props.isAnimation ? '""' : 'none',
-        backgroundImage: 'url("src/img/pusheen.gif")',
-        backgroundPosition: '50% 50%',
-        backgroundRepeat: 'no-repeat',
-        backgroundColor: '#fcf1e4',
-        position: 'absolute',
-        top: '0',
-        left: '0',
-        width: '100%',
-        height: '100%',
-    },
+    backgroundColor: '#fcf1e4'
 }));
 export const FieldContainer = styled.div(() => ({
     backgroundColor: 'white',

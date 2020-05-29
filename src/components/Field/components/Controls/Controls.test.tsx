@@ -12,7 +12,6 @@ describe('Controls test', () => {
             fullness={30}
             handleChange={Function}
             handleSubmit={Function}
-            handleSubmitAuthorization={Function}
             pauseGame={Function}
             randomlyFill={Function}
             resetGame={Function}

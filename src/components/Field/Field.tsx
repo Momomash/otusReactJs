@@ -10,7 +10,6 @@ type State = {
     sizeY: number;
     fullness: number;
     cells: CellStatus[][];
-    isAnimation: boolean;
     delay: number;
     interval: any;
     ageCounter: number;
@@ -153,15 +152,6 @@ export class Field extends React.Component<Props, State> {
         }
         this.setState({ cells: cells });
     };
-
-    componentDidMount(): void {
-        this._isMounted = true;
-        if (this._isMounted) {
-            setTimeout(() => {
-                this.setState({ isAnimation: false });
-            }, 1000);
-        }
-    }
 
     componentDidUpdate(): void {
         if (this.isGameOver(this.state.cells)) {

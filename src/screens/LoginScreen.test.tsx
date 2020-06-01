@@ -3,7 +3,7 @@ import React from 'react';
 import { LoginScreen } from './LoginScreen';
 import { shallow } from 'enzyme';
 import { login } from '@/api/auth';
-import { Input } from '@/screens/emotionWrapper';
+import { Input } from 'components/emotionWrapper';
 
 const sleep = (x: number) => new Promise((r) => setTimeout(r, x));
 

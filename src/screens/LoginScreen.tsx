@@ -1,4 +1,4 @@
-import { Input, BrownSubmit, Container, H1Center } from '@/screens/emotionWrapper';
+import { Input, BrownSubmit, Container, H1Center } from '@/components/emotionWrapper';
 import React, { useCallback, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { login } from '@/api/auth';
@@ -6,14 +6,17 @@ import { login } from '@/api/auth';
 export const LoginScreen: React.FC<{}> = () => {
     const [name, setName] = useState('');
     const history = useHistory();
-    const handleSubmit = useCallback(
-        async (ev) => {
-            ev.preventDefault();
-            await login(name);
-            history.push(`/game/`);
-        },
-        [name],
-    );
+    const handleSubmit = async (event: any) => {
+        event.preventDefault();
+        event.preventDefault();
+        await login(name);
+        history.push(`/game/`);
+    };
+    const handleChange = (event: any) => {
+        const target = event.target;
+        const name: string = target.name;
+        setName(target.value);
+    };
     return (
         <Container>
             <H1Center>
@@ -25,11 +28,10 @@ export const LoginScreen: React.FC<{}> = () => {
                     placeholder="Enter your name"
                     name="name"
                     value={name}
-                    onChange={(ev) => setName((ev.target as HTMLInputElement).value)}
+                    onChange={handleChange}
                 />
                 <BrownSubmit>Login</BrownSubmit>
             </form>
         </Container>
     );
 };
-

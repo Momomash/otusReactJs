@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, H1Center } from '@/screens/emotionWrapper';
+import { Container, H1Center } from '@/components/emotionWrapper';
 
 export class NotFoundScreen extends React.Component {
     render() {

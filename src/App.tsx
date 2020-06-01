@@ -7,14 +7,14 @@ import { NotFoundScreen } from '@/screens/NotFoundScreen';
 import { Redirect } from 'react-router-dom';
 import { authorizedOnlyHoc } from '@/utils/authorizedOnlyHOC';
 
+const loginScreen = authorizedOnlyHoc(LoginScreen, '/game', true);
+const gameScreen = authorizedOnlyHoc(GameScreen, '/login');
 export const App: React.FC<{}> = () => (
     <Router>
         <Switch>
-            <Route path="/" exact>
-                <Redirect to={'/login'} />
-            </Route>
-            <Route path="/login" component={authorizedOnlyHoc(LoginScreen, '/game', true)} />
-            <Route path="/game" component={authorizedOnlyHoc(GameScreen, '/login')} />
+            <Redirect from="/" to={'/login'} exact />
+            <Route path="/login" component={loginScreen} />
+            <Route path="/game" component={gameScreen} />
             <Route path="*">
                 <NotFoundScreen />
             </Route>

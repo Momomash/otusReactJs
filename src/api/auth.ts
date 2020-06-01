@@ -7,6 +7,9 @@ export const login = async (name: string) => {
 export const logout = async () => {
     await localStorage.removeItem('login');
 };
+export const getLogin = async (): Promise<string | null> => {
+    return await localStorage.getItem('login');
+};
 
 export const isLoggedIn = async () => {
     await sleep(2000);

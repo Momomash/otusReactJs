@@ -12,7 +12,6 @@ describe('Controls test', () => {
             fullness={30}
             handleChange={Function}
             handleSubmit={Function}
-            handleSubmitAuthorization={Function}
             pauseGame={Function}
             randomlyFill={Function}
             resetGame={Function}
@@ -24,10 +23,6 @@ describe('Controls test', () => {
     );
     it('check playerName input', () => {
         wrapper.find('Input[name="playerName"]').simulate('change');
-        expect(Function).toHaveBeenCalled();
-    });
-    it('check playerName submit', () => {
-        wrapper.find('BrownSubmit[name="playerNameSubmit"]').simulate('submit');
         expect(Function).toHaveBeenCalled();
     });
     it('check sizeX input', () => {

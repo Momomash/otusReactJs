@@ -78,7 +78,4 @@ export const BrownSubmit = styled.input(() => ({
     },
 }));
 BrownSubmit.displayName = 'BrownSubmit';
-export const FieldRow = styled.div`
-    display: flex;
-    flex-direction: row;
-`;
+

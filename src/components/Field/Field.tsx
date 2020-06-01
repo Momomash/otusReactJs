@@ -10,11 +10,9 @@ type State = {
     sizeY: number;
     fullness: number;
     cells: CellStatus[][];
-    isAnimation: boolean;
     delay: number;
     interval: any;
     ageCounter: number;
-    playerName: string;
 };
 
 export class Field extends React.Component<Props, State> {
@@ -28,7 +26,6 @@ export class Field extends React.Component<Props, State> {
         isAnimation: true,
         interval: 0,
         ageCounter: 0,
-        playerName: 'Momo',
     };
     handleChange = (event: any): void => {
         const target = event.target;
@@ -44,10 +41,7 @@ export class Field extends React.Component<Props, State> {
             };
         });
     };
-    handleSubmitAuthorization = (event: any) => {
-        event.preventDefault();
-        this.setState({ playerName: event.target.playerName });
-    };
+
     randomlyFill = (event: any): void => {
         this.setState((prevState) => {
             const newCells = Array.from(prevState.cells);
@@ -159,15 +153,6 @@ export class Field extends React.Component<Props, State> {
         this.setState({ cells: cells });
     };
 
-    componentDidMount(): void {
-        this._isMounted = true;
-        if (this._isMounted) {
-            setTimeout(() => {
-                this.setState({ isAnimation: false });
-            }, 1000);
-        }
-    }
-
     componentDidUpdate(): void {
         if (this.isGameOver(this.state.cells)) {
             clearInterval(this.state.interval);
@@ -182,13 +167,11 @@ export class Field extends React.Component<Props, State> {
         return (
             <Game isAnimation={this.state.isAnimation}>
                 <h1>Game of Life</h1>
-                <h2>Player - {this.state.playerName}</h2>
                 <Controls
                     sizeX={this.state.sizeX}
                     sizeY={this.state.sizeY}
                     fullness={this.state.fullness}
                     delay={this.state.delay}
-                    handleSubmitAuthorization={this.handleSubmitAuthorization}
                     handleChange={this.handleChange}
                     handleSubmit={this.handleSubmit}
                     randomlyFill={this.randomlyFill}

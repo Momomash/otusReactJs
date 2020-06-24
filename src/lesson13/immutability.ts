@@ -29,11 +29,9 @@ export const originalArrayToExpectedArray = (
     originalArray: SomeArray,
     expectedArray: SomeArray,
 ): SomeArray => {
-    const newArray = [];
-    for (let i = 0; i < originalArray.length; i++) {
-        newArray[i] = originalArray[i] != expectedArray[i] ? expectedArray[i] : originalArray[i];
-    }
-    return newArray;
+    return originalArray.map(function (item, i) {
+        return item != expectedArray[i] ? expectedArray[i] : item;
+    });
 };
 
 // Задание 3
@@ -45,18 +43,18 @@ export type Team = {
         age: number;
     };
 };
-
-export const originalTeamToExpectedTeam = (originalTeam: Team, expectedTeam: Team): any => {
-    const deepClone = (originalTeam: any, expectedTeam: any): any => {
-        const clObj: any = {};
-        for (const key in originalTeam) {
-            if (originalTeam[key] instanceof Object) {
-                clObj[key] = deepClone(originalTeam[key], expectedTeam[key]);
-                continue;
-            }
-            clObj[key] = expectedTeam[key];
+export type TeamObject = {[index: string]:any};
+export const originalTeamToExpectedTeam = (
+    originalTeam: TeamObject,
+    expectedTeam: TeamObject,
+): TeamObject => {
+    const clObj: TeamObject = {};
+    for (const key in originalTeam) {
+        if (originalTeam[key] instanceof Object) {
+            clObj[key] = originalTeamToExpectedTeam(originalTeam[key], expectedTeam[key]);
+            continue;
         }
-        return clObj;
-    };
-    return deepClone(originalTeam, expectedTeam);
+        clObj[key] = expectedTeam[key];
+    }
+    return clObj;
 };

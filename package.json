@@ -88,11 +88,9 @@
     "webpack-cli": "3.3.11"
   },
   "dependencies": {
-    "@types/ramda": "^0.27.6",
     "core-js": "3.6.5",
     "lodash": "4.17.15",
     "loki": "0.20.3",
-    "ramda": "^0.27.0",
     "react": "16.13.1",
     "react-docgen-typescript-loader": "3.7.2",
     "react-dom": "16.13.1",

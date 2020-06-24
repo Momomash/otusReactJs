@@ -30,7 +30,7 @@ test('team to team', () => {
 
 // Задание 2
 test('array to array', () => {
-    const originalArray = Object.freeze([1, 2, 3, 4]);
+    const originalArray = [1, 2, 3, 4];
 
     const expectedArray = ['two', 3, 4, 5];
 

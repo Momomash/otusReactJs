@@ -52,6 +52,13 @@ export const reducer: Reducer<State> = (state = initialState, action) => {
                 data: null,
                 error: action.error,
             };
+        case 'ANALYTICS_CLICK':
+            return {
+                ...state,
+                isLoading: false,
+                data: 'Click',
+                error: null,
+            };
         default:
             return state;
     }
@@ -65,9 +72,16 @@ export function Lesson17App() {
     const thunkDispatch = (action: any) => {
         if (typeof action === 'function') {
             action(thunkDispatch, store.getState);
-        } else {
-            dispatch(action);
+            return;
         }
+        if (action.meta && action.meta.probability) {
+            const random = Math.random();
+            if (action.meta.probability > random) {
+                dispatch(action);
+            }
+            return;
+        }
+        dispatch(action);
     };
     const makeRequest = () => {
         dispatch({ type: 'LOADING' });
@@ -84,6 +98,13 @@ export function Lesson17App() {
             <button onClick={() => thunkDispatch(getSwapiForCurrentPeople())}>
                 {' '}
                 Test thunk middleware
+            </button>
+            <button
+                onClick={() =>
+                    thunkDispatch({ type: 'ANALYTICS_CLICK', meta: { probability: 0.5 } })
+                }
+            >
+                Test probability middleware
             </button>
             {state.isLoading && <div>Loading...</div>}
             {state.error && <div style={{ color: 'red' }}>{state.error.message}</div>}

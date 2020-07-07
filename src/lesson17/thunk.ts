@@ -6,3 +6,12 @@ src/lesson17/homework/thunk.ts
 +1 балл за свой thunk middleware и подключение в приложение
 +1 балл за тесты
 */
+import { Dispatch } from 'redux';
+
+export const getSwapiForCurrentPeople = () => (dispatch: Dispatch, getState: Function) => {
+    dispatch({ type: 'LOADING' });
+
+    fetch(`https://swapi.dev/api/people/`)
+        .then(async (data) => dispatch({ type: 'SUCCESS', data: await data.json() }))
+        .catch((error) => dispatch({ type: 'ERROR', error }));
+};

@@ -20,6 +20,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { createStore, Reducer } from 'redux';
 
 import * as React from 'react';
+import { getSwapiForCurrentPeople } from '@/lesson17/thunk';
 
 type State = {
     isLoading: boolean;
@@ -61,7 +62,13 @@ export const store = createStore(reducer);
 export function Lesson17App() {
     const state = useSelector((state: State) => state);
     const dispatch = useDispatch();
-
+    const thunkDispatch = (action: any) => {
+        if (typeof action === 'function') {
+            action(thunkDispatch, store.getState);
+        } else {
+            dispatch(action);
+        }
+    };
     const makeRequest = () => {
         dispatch({ type: 'LOADING' });
 
@@ -71,10 +78,13 @@ export function Lesson17App() {
             })
             .catch((error) => dispatch({ type: 'FAILED', error }));
     };
-
     return (
         <div>
             <button onClick={makeRequest}>Make an api request</button>
+            <button onClick={() => thunkDispatch(getSwapiForCurrentPeople())}>
+                {' '}
+                Test thunk middleware
+            </button>
             {state.isLoading && <div>Loading...</div>}
             {state.error && <div style={{ color: 'red' }}>{state.error.message}</div>}
             {state.data && (

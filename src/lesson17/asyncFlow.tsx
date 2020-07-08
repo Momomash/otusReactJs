@@ -18,6 +18,7 @@ src/lesson17/homework/asyncFlow.ts
 
 import { useSelector, useDispatch } from 'react-redux';
 import { createStore, Reducer } from 'redux';
+import * as t from './actionTypes';
 
 import * as React from 'react';
 import { getSwapiForCurrentPeople } from '@/lesson17/thunk';
@@ -28,7 +29,7 @@ type State = {
     error: Error | null;
 };
 
-const initialState: State = {
+export const initialState: State = {
     isLoading: false,
     data: null,
     error: null,
@@ -36,23 +37,23 @@ const initialState: State = {
 
 export const reducer: Reducer<State> = (state = initialState, action) => {
     switch (action.type) {
-        case 'LOADING':
+        case t.LOADING:
             return { ...state, isLoading: true };
-        case 'SUCCESS':
+        case t.SUCCESS:
             return {
                 ...state,
                 isLoading: false,
                 data: action.data,
                 error: null,
             };
-        case 'FAILED':
+        case t.FAILED:
             return {
                 ...state,
                 isLoading: false,
                 data: null,
                 error: action.error,
             };
-        case 'ANALYTICS_CLICK':
+        case t.ANALYTICS_CLICK:
             return {
                 ...state,
                 isLoading: false,

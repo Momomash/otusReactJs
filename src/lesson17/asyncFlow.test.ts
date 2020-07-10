@@ -9,26 +9,20 @@ describe('test actions and reducer', () => {
         const dispatch = jest.fn();
 
         it('success action', async () => {
-            // @ts-ignore
-            window.fetch = jest.fn(() => {
-                const promise = new Promise(function (resolve, reject) {
-                    resolve(mock);
-                });
-                return promise;
+            const mockFetchPromise = new Promise(function (resolve, reject) {
+                resolve(mock);
             });
+            window.fetch = jest.fn().mockImplementation(() => mockFetchPromise);
             await makeRequest(dispatch);
             expect(dispatch).toBeCalledTimes(2);
             expect(dispatch.mock.calls[0][0]).toEqual({ type: 'LOADING' });
             expect(dispatch.mock.calls[1][0]).toEqual({ type: 'SUCCESS', data });
         });
         it('failed action', async () => {
-            // @ts-ignore
-            window.fetch = jest.fn(() => {
-                const promise = new Promise(function (resolve, reject) {
-                    reject();
-                });
-                return promise;
+            const mockFetchPromise = new Promise(function (resolve, reject) {
+                reject();
             });
+            window.fetch = jest.fn().mockImplementation(() => mockFetchPromise);
             await makeRequest(dispatch);
             expect(dispatch).toBeCalledTimes(2);
             expect(dispatch.mock.calls[0][0]).toEqual({ type: 'LOADING' });

@@ -92,6 +92,7 @@
     "@reduxjs/toolkit": "^1.4.0",
     "core-js": "3.6.5",
     "emotion": "^10.0.27",
+    "fetch-polyfill": "^0.8.2",
     "lodash": "4.17.15",
     "loki": "0.20.3",
     "react": "16.13.1",

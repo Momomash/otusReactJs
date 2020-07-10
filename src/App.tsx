@@ -6,7 +6,7 @@ import { GameScreen } from '@/screens/GameScreen';
 import { NotFoundScreen } from '@/screens/NotFoundScreen';
 import { Redirect } from 'react-router-dom';
 import { authorizedOnlyHoc } from '@/utils/authorizedOnlyHOC';
-import { Lesson17App } from './lesson17/asyncFlow';
+import { Lesson17Screen } from '@/screens/Lesson17Screen';
 
 const loginScreen = authorizedOnlyHoc(LoginScreen, '/game', true);
 const gameScreen = authorizedOnlyHoc(GameScreen, '/login');
@@ -16,7 +16,7 @@ export const App: React.FC<{}> = () => (
             <Redirect from="/" to={'/login'} exact />
             <Route path="/login" component={loginScreen} />
             <Route path="/game" component={gameScreen} />
-            <Route path="/lesson17" component={Lesson17App} />
+            <Route path="/lesson17" component={Lesson17Screen} />
             <Route path="*">
                 <NotFoundScreen />
             </Route>

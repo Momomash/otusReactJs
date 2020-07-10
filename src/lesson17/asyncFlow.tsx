@@ -1,53 +1,17 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { createStore, Reducer } from 'redux';
-import * as t from './actionTypes';
-
 import * as React from 'react';
 import { getSwapiForCurrentPeople } from '@/lesson17/thunk';
+import { State, store } from './reducer';
 
-type State = {
-    isLoading: boolean;
-    data: any | null;
-    error: Error | null;
+export const makeRequest = (dispatch: any) => {
+    dispatch({ type: 'LOADING' });
+
+    return fetch('https://swapi.dev/api/people/')
+        .then(async (data) => {
+            dispatch({ type: 'SUCCESS', data: await data.json() });
+        })
+        .catch((error) => dispatch({ type: 'FAILED', error }));
 };
-
-export const initialState: State = {
-    isLoading: false,
-    data: null,
-    error: null,
-};
-
-export const reducer: Reducer<State> = (state = initialState, action) => {
-    switch (action.type) {
-        case t.LOADING:
-            return { ...state, isLoading: true };
-        case t.SUCCESS:
-            return {
-                ...state,
-                isLoading: false,
-                data: action.data,
-                error: null,
-            };
-        case t.FAILED:
-            return {
-                ...state,
-                isLoading: false,
-                data: null,
-                error: action.error,
-            };
-        case t.ANALYTICS_CLICK:
-            return {
-                ...state,
-                isLoading: false,
-                data: 'Click',
-                error: null,
-            };
-        default:
-            return state;
-    }
-};
-
-export const store = createStore(reducer);
 
 export function Lesson17App() {
     const state = useSelector((state: State) => state);
@@ -66,18 +30,10 @@ export function Lesson17App() {
         }
         dispatch(action);
     };
-    const makeRequest = () => {
-        dispatch({ type: 'LOADING' });
 
-        return fetch('https://swapi.dev/api/people/')
-            .then(async (data) => {
-                dispatch({ type: 'SUCCESS', data: await data.json() });
-            })
-            .catch((error) => dispatch({ type: 'FAILED', error }));
-    };
     return (
         <div>
-            <button onClick={makeRequest}>Make an api request</button>
+            <button onClick={() => makeRequest(dispatch)}>Make an api request</button>
             <button onClick={() => thunkDispatch(getSwapiForCurrentPeople())}>
                 {' '}
                 Test thunk middleware

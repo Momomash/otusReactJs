@@ -9,59 +9,59 @@ describe('test actions and reducer', () => {
         const dispatch = jest.fn();
 
         it('success action', async () => {
-            const mockFetchPromise = new Promise(function (resolve, reject) {
-                resolve(mock);
-            });
-            window.fetch = jest.fn().mockImplementation(() => mockFetchPromise);
+            window.fetch = jest.fn().mockResolvedValue(mock);
             await makeRequest(dispatch);
             expect(dispatch).toBeCalledTimes(2);
             expect(dispatch.mock.calls[0][0]).toEqual({ type: 'LOADING' });
             expect(dispatch.mock.calls[1][0]).toEqual({ type: 'SUCCESS', data });
         });
         it('failed action', async () => {
-            const mockFetchPromise = new Promise(function (resolve, reject) {
-                reject();
-            });
-            window.fetch = jest.fn().mockImplementation(() => mockFetchPromise);
+            window.fetch = jest.fn().mockRejectedValue('error');
             await makeRequest(dispatch);
             expect(dispatch).toBeCalledTimes(2);
             expect(dispatch.mock.calls[0][0]).toEqual({ type: 'LOADING' });
-            expect(dispatch.mock.calls[1][0]).toEqual({ type: 'FAILED' });
+            expect(dispatch.mock.calls[1][0]).toEqual({ type: 'FAILED', error: 'error' });
         });
     });
 
     describe('reducer', () => {
         it('LOADING dispatched', () => {
-            const action = {
-                type: t.LOADING,
+            const loadingAction = () => {
+                return {
+                    type: t.LOADING,
+                };
             };
-            expect(reducer(initialState, action)).toEqual({
+            expect(reducer(initialState, loadingAction())).toEqual({
                 ...initialState,
                 isLoading: true,
             });
         });
         it('SUCCESS dispatched', () => {
-            const action = {
-                type: t.SUCCESS,
-                data: 'test data',
+            const successAction = () => {
+                return {
+                    type: t.SUCCESS,
+                    data: 'test data',
+                };
             };
-            expect(reducer(initialState, action)).toEqual({
+            expect(reducer(initialState, successAction())).toEqual({
                 ...initialState,
                 isLoading: false,
-                data: action.data,
+                data: successAction().data,
                 error: null,
             });
         });
         it('FAILED dispatched', () => {
-            const action = {
-                type: t.FAILED,
-                error: 'failed error',
+            const failedAction = () => {
+                return {
+                    type: t.FAILED,
+                    error: 'failed error',
+                };
             };
-            expect(reducer(initialState, action)).toEqual({
+            expect(reducer(initialState, failedAction())).toEqual({
                 ...initialState,
                 isLoading: false,
                 data: null,
-                error: action.error,
+                error: failedAction().error,
             });
         });
         it('ANALYTICS_CLICK dispatched', () => {
